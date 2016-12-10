@@ -1,3 +1,9 @@
+# ____                   ____            ____  _   _    _                   
+#|  _ \ _ __   _____   _|  _ \ _ __ ___ |  _ \| \ | |  / \   ___  ___  __ _ 
+#| | | | '_ \ / _ \ \ / / |_) | '_ ` _ \| |_) |  \| | / _ \ / __|/ _ \/ _` |
+#| |_| | | | | (_) \ V /|  __/| | | | | |  _ <| |\  |/ ___ \\__ \  __/ (_| |
+#|____/|_| |_|\___/ \_/ |_|   |_| |_| |_|_| \_\_| \_/_/   \_\___/\___|\__, |
+#                                                                        |_|
 
 ############# dvir1.06-based analysis
 grpTrinotate<-read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/eXpress.analyses/MaleRNAseq.R.files/Annotations/Trinotate_report_dvir1.06_subset.txt", sep = "\t", header = T, na.strings = ".")
