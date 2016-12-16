@@ -6,18 +6,51 @@
 #                                                                        |_|
 
 ############# dvir1.06-based analysis
-grpTrinotate<-read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/eXpress.analyses/MaleRNAseq.R.files/Annotations/Trinotate_report_dvir1.06_subset.txt", sep = "\t", header = T, na.strings = ".")
-gffRecord <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/eXpress.analyses/MaleRNAseq.R.files/Annotations/FBgn_ID_name_coordinates.txt", header = T)
-melOrths <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/eXpress.analyses/MaleRNAseq.R.files/Annotations/mel_orths.txt", header = T)
+#### Export annotation files
+grpTrinotate<-read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Annotations/Trinotate_report_dvir1.06_subset.txt", sep = "\t", header = T, na.strings = ".")
+gffRecord <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Annotations/FBgn_ID_name_coordinates.txt", header = T)
+melOrths <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Other.Drosophilas/Dmel/mel_orths.txt", header = T)
 melOrthsAll<-aggregate(mel_GeneSymbol~FBgn_ID, data = melOrths, toString)
 tmp.merged <- merge(melOrthsAll, grpTrinotate, all=TRUE)
 Annots <- merge(tmp.merged, gffRecord, all=TRUE)
 rm(grpTrinotate, melOrthsAll, tmp.merged)
 
+# Read in expression data
 DnovPM.dvir1.06.CountsMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.counts.matrix", header=T, row.names=1, com='', check.names=F)
 DnovPM.dvir1.06.TpmMatrix.cbmt = read.table("ExpressionData/genes_DnovPM_dvi1.06.TPM.not_cross_norm.counts_by_min_TPM", header = T)
 DnovPM.dvir1.06.TmmMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.TMM.EXPR.matrix", header=T, row.names=1, com='', check.names=F)
 
+## Read in PAML and KaKs data 
+tmp.FB.names = unique(subset(Annots, select=c("FBgn_ID", "FBtr_ID")))
+paml.data = read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/PAML.Files/PAML.branchSite.ALL.results.txt", header = T, sep = "\t")
+paml.data = merge(tmp.FB.names, paml.data, all=T)
+paml.data = merge(gffRecord, paml.data, all=T)
+KaKs.data = read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/PAML.Files/KaKs.ALL.results.txt", header = T, sep = "\t", check.names = F)
+KaKs.data = merge(tmp.FB.names, KaKs.data, all=T)
+KaKs.data = merge(gffRecord, KaKs.data, all=T)
+
+#### Calaculate LRT, pValues and FDR for PAML data
+paml.data$Damr_LRT = 2*(paml.data$Damr_brSt_H1 - paml.data$Damr_brSt_H0)
+paml.data$Damr_pValue = pchisq(q = paml.data$Damr_LRT, df = 1, lower.tail = F)
+paml.data$Damr_FDR = p.adjust(p = paml.data$Damr_pValue, method = "fdr")
+
+paml.data$Dlum_LRT = 2*(paml.data$Dlum_brSt_H1 - paml.data$Dlum_brSt_H0)
+paml.data$Dlum_pValue = pchisq(q = paml.data$Dlum_LRT, df = 1, lower.tail = F)
+paml.data$Dlum_FDR = p.adjust(p = paml.data$Dlum_pValue, method = "fdr")
+
+paml.data$Dnov_LRT = 2*(paml.data$Dnov_brSt_H1 - paml.data$Dnov_brSt_H0)
+paml.data$Dnov_pValue = pchisq(q = paml.data$Dnov_LRT, df = 1, lower.tail = F)
+paml.data$Dnov_FDR = p.adjust(p = paml.data$Dnov_pValue, method = "fdr")
+
+paml.data$Dvir_LRT = 2*(paml.data$Dvir_brSt_H1 - paml.data$Dvir_brSt_H0)
+paml.data$Dvir_pValue = pchisq(q = paml.data$Dvir_LRT, df = 1, lower.tail = F)
+paml.data$Dvir_FDR = p.adjust(p = paml.data$Dvir_pValue, method = "fdr")
+
+paml.data$DamrNov_LRT = 2*(paml.data$DamrNov_brSt_H1 - paml.data$DamrNov_brSt_H0)
+paml.data$DamrNov_pValue = pchisq(q = paml.data$DamrNov_LRT, df = 1, lower.tail = F)
+paml.data$DamrNov_FDR = p.adjust(p = paml.data$DamrNov_pValue, method = "fdr")
+
+# Read in sample info
 DnovPM.Samples_data = read.table("ExpressionData/samples.txt", header=F, check.names=F, fill=T)
 DnovPM.Samples_data = DnovPM.Samples_data[DnovPM.Samples_data[,2] != '',]
 
@@ -102,7 +135,7 @@ DnovPM_MeanTPMmatrix<-cast(m.DnovPM.TPM.tmp.c, FBgn_ID~sample+tissue, value ="TP
 TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "conspecific", "heterospecific"))
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
 ## plot a gene's expression like this:
-plotGenePM(TPMse_DnovPM, "FBgn0283024")
+plotGenePM_RT(TPMse_DnovPM, "GJ10165")
 
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
@@ -140,7 +173,19 @@ YazHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = T)
 # lapply(Dnov.dvir1.06.RT.list, plotGenePM, object = TPMse_DnovPM)
 # dev.off()
 
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + geom_point(size=2, alpha=0.5, colour = "#7d49c3") + geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega), inherit.aes = F, size=2, alpha=0.5, colour = "#4f922a") + geom_hline(yintercept = 0.15, linetype="dashed", colour = "yellow") + geom_hline(yintercept = 1, linetype="dashed", colour = "gray")  + facet_grid(~chromosome, scales = "free_x") + scale_colour_manual(name = "", values =c("#7aa457"="#7aa457","#9e6ebd"="#9e6ebd"), labels = c("SFPs","EB biased")) + scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + xlab ("Chromosome coordinates (Mb)") + labs(y=expression(K[a]/K[s])) + geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800 & chromosome == "Chr_2"), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") + geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") + theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
+ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
+    geom_point(size=2, alpha=0.5, colour = "#7d49c3") + 
+    # geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega), inherit.aes = F, size=2, alpha=0.5, colour = "#4f922a") + 
+    geom_hline(yintercept = 0.15, linetype="dashed", colour = "yellow") + 
+    geom_hline(yintercept = 1, linetype="dashed", colour = "gray")  + 
+    facet_grid(~chromosome, scales = "free_x") + 
+    scale_colour_manual(name = "", values =c("#7aa457"="#7aa457","#9e6ebd"="#9e6ebd"), labels = c("SFPs","EB biased")) + 
+    scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + 
+    xlab ("Chromosome coordinates (Mb)") + 
+    labs(y=expression(K[a]/K[s])) + 
+    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800 & chromosome == "Chr_2"), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") + 
+    # geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") + 
+    theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
 
 # better way
 df1 = subset(m.DnovPM.TPM.tmp, FBgn_ID == "FBgn0202928")
