@@ -6,49 +6,11 @@
 #                                                                        |_|
 
 ############# dvir1.06-based analysis
-#### Export annotation files
-grpTrinotate<-read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Annotations/Trinotate_report_dvir1.06_subset.txt", sep = "\t", header = T, na.strings = ".")
-gffRecord <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Annotations/FBgn_ID_name_coordinates.txt", header = T)
-melOrths <- read.table(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/Other.Drosophilas/Dmel/mel_orths.txt", header = T)
-melOrthsAll<-aggregate(mel_GeneSymbol~FBgn_ID, data = melOrths, toString)
-tmp.merged <- merge(melOrthsAll, grpTrinotate, all=TRUE)
-Annots <- merge(tmp.merged, gffRecord, all=TRUE)
-rm(grpTrinotate, melOrthsAll, tmp.merged)
 
 # Read in expression data
 DnovPM.dvir1.06.CountsMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.counts.matrix", header=T, row.names=1, com='', check.names=F)
 DnovPM.dvir1.06.TpmMatrix.cbmt = read.table("ExpressionData/genes_DnovPM_dvi1.06.TPM.not_cross_norm.counts_by_min_TPM", header = T)
 DnovPM.dvir1.06.TmmMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.TMM.EXPR.matrix", header=T, row.names=1, com='', check.names=F)
-
-## Read in PAML and KaKs data 
-tmp.FB.names = unique(subset(Annots, select=c("FBgn_ID", "FBtr_ID")))
-paml.data = read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/PAML.Files/PAML.branchSite.ALL.results.txt", header = T, sep = "\t")
-paml.data = merge(tmp.FB.names, paml.data, all=T)
-paml.data = merge(gffRecord, paml.data, all=T)
-KaKs.data = read.csv(file = "~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/PAML.Files/KaKs.ALL.results.txt", header = T, sep = "\t", check.names = F)
-KaKs.data = merge(tmp.FB.names, KaKs.data, all=T)
-KaKs.data = merge(gffRecord, KaKs.data, all=T)
-
-#### Calaculate LRT, pValues and FDR for PAML data
-paml.data$Damr_LRT = 2*(paml.data$Damr_brSt_H1 - paml.data$Damr_brSt_H0)
-paml.data$Damr_pValue = pchisq(q = paml.data$Damr_LRT, df = 1, lower.tail = F)
-paml.data$Damr_FDR = p.adjust(p = paml.data$Damr_pValue, method = "fdr")
-
-paml.data$Dlum_LRT = 2*(paml.data$Dlum_brSt_H1 - paml.data$Dlum_brSt_H0)
-paml.data$Dlum_pValue = pchisq(q = paml.data$Dlum_LRT, df = 1, lower.tail = F)
-paml.data$Dlum_FDR = p.adjust(p = paml.data$Dlum_pValue, method = "fdr")
-
-paml.data$Dnov_LRT = 2*(paml.data$Dnov_brSt_H1 - paml.data$Dnov_brSt_H0)
-paml.data$Dnov_pValue = pchisq(q = paml.data$Dnov_LRT, df = 1, lower.tail = F)
-paml.data$Dnov_FDR = p.adjust(p = paml.data$Dnov_pValue, method = "fdr")
-
-paml.data$Dvir_LRT = 2*(paml.data$Dvir_brSt_H1 - paml.data$Dvir_brSt_H0)
-paml.data$Dvir_pValue = pchisq(q = paml.data$Dvir_LRT, df = 1, lower.tail = F)
-paml.data$Dvir_FDR = p.adjust(p = paml.data$Dvir_pValue, method = "fdr")
-
-paml.data$DamrNov_LRT = 2*(paml.data$DamrNov_brSt_H1 - paml.data$DamrNov_brSt_H0)
-paml.data$DamrNov_pValue = pchisq(q = paml.data$DamrNov_LRT, df = 1, lower.tail = F)
-paml.data$DamrNov_FDR = p.adjust(p = paml.data$DamrNov_pValue, method = "fdr")
 
 # Read in sample info
 DnovPM.Samples_data = read.table("ExpressionData/samples.txt", header=F, check.names=F, fill=T)
@@ -59,7 +21,10 @@ libSizes <- as.data.frame(colSums(DnovPM.dvir1.06.CountsMatrix))
 libSizes <- cbind(sample = row.names(libSizes), libSizes)
 row.names(libSizes)<- NULL
 colnames(libSizes) = c("sample", "Total_reads")
-ggplot(libSizes, aes(sample, Total_reads)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = -90, hjust = 0)) + geom_hline(yintercept = 20000000)
+ggplot(libSizes, aes(sample, Total_reads)) + 
+    geom_bar(stat="identity") + 
+    theme(axis.text.x = element_text(angle = -90, hjust = 0)) + 
+    geom_hline(yintercept = 20000000)
 
 
 ## Boxplot of log10(TPM) across all samples
@@ -69,12 +34,10 @@ m.expData.exp<- within(m.expData, replicate<-data.frame(do.call('rbind', strspli
 m.expData<-data.frame(m.expData, m.expData.exp$replicate$X1, m.expData.exp$replicate$X2, m.expData.exp$replicate$X3)
 colnames(m.expData) <- c("gene_id", "replicate", "TPM", "sample", "tissue", "rep_num")
 m.expData$TPM <- m.expData$TPM + 1
-p <- ggplot(m.expData)
-p <- p + geom_boxplot(aes(x = replicate, y = log10(TPM), fill = tissue, colour = sample), size = 0.3, alpha = I(1/3))
-p <- p + theme(axis.text.x = element_text(angle = -90, hjust = 0))
-p <- p + scale_fill_hue(l = 50, h.start = 200)
-p
-
+ggplot(m.expData) + 
+    geom_boxplot(aes(x = replicate, y = log10(TPM), fill = tissue, colour = sample), size = 0.3, alpha = I(1/3)) + 
+    theme(axis.text.x = element_text(angle = -90, hjust = 0)) + 
+    scale_fill_hue(l = 50, h.start = 200)
 
 ## Estimate of the number of expressed genes (Brian Haas' method)
 # extract the data between 10 TPM and 100 TPM
@@ -86,7 +49,7 @@ print(DnovPM_fit)
 ggplot(DnovPM.dvir1.06.TpmMatrix.cbmt, aes(neg_min_tpm,num_features)) + geom_point() + scale_x_continuous(limits=c(-100,0)) + scale_y_continuous(limits=c(0,20000)) + geom_smooth(data=DnovPM_filt_data, method = "lm") + geom_hline(yintercept = 9185, colour = "green") + ggtitle("dvir1.06")
 
 ## calculate dispersion
-d <- DGEList(counts = DnovPM.dvir1.06.CountsMatrix, group = DnovPM.Samples_data$V1)
+d <- DGEList(counts = DnovPM.dvir1.06.min400count.BRR, group = DnovPM.GoodSamples$V1)
 d <- calcNormFactors(d)
 d <- estimateCommonDisp(d)
 d <- estimateTagwiseDisp(d)
@@ -97,12 +60,12 @@ plotBCV(d)
 plotMDS(d, method = "bcv", col=as.numeric(d$samples$group))
 
 ## Plot sample correlation
-data = log2(DnovPM.dvir1.06.CountsMatrix+1)
+data = log2(DnovPM.dvir1.06.min400count.BRR+1)
 data = as.matrix(data)
 sample_cor = cor(data, method='pearson', use='pairwise.complete.obs')
 sample_dist = as.dist(1-sample_cor)
 hc_samples = hclust(sample_dist, method='complete')
-heatmap.3(sample_cor, dendrogram='both', Rowv=as.dendrogram(hc_samples), Colv=as.dendrogram(hc_samples), col = greenred(75), scale='none', symm=TRUE, key=TRUE,density.info='none', trace='none', symkey=FALSE, symbreaks=F, margins=c(10,10), cexCol=1, cexRow=1, cex.main=0.75, main=paste("sample correlation matrix"))
+heatmap.3(sample_cor, dendrogram='both', Rowv=as.dendrogram(hc_samples), Colv=as.dendrogram(hc_samples), col = colorpanel(75, '#dd70cd','black','#afc64f'), scale='none', symm=TRUE, key=TRUE,density.info='none', trace='none', symkey=FALSE, symbreaks=F, margins=c(10,10), cexCol=1, cexRow=1, cex.main=0.75, main=paste("sample correlation matrix"))
 
 # normalize by DESeq method:
 meta <- data.frame(row.names=colnames(DnovPM.dvir1.06.CountsMatrix), condition=DnovPM.Samples_data$V1)
@@ -111,17 +74,40 @@ DnovPMCountData_normByDESeq = newCountDataSet(DnovPMCountData, meta)
 DnovPMCountData_normByDESeq = estimateSizeFactors(DnovPMCountData_normByDESeq)
 DnovPMCountData_normByDESeq = data.frame(counts(DnovPMCountData_normByDESeq, normalized=T))
 
-#MA_BPlot(DnovPMCountData_normByDESeq, "V_RT_2", "V_RT_1")
+MA_BPlot(DnovPMCountData_normByDESeq, "C6_RT_3", "C6_RT_2")
 
 ## Filter count data by minimum count across ANY sample
 DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix, 1, max)
 DnovPM.dvir1.06.CountsMatrix.min400count = DnovPM.dvir1.06.CountsMatrix[DnovPM_max_gene_expr_per_row >= 400,,drop=F ]
 
+##########################################################################################
+################# Remove "bad" replicates  for DE analysis ###############################
+### Based on the QC analysis above, some replicates show inconsistencies that are likely due to cross tissue contamination
+### during dissections. The DE analysis will exclude these replicates
+
+## Define good replicates (propper replicate grouping and correlation)
+DnovPM.GoodReps = as.character(subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")$V2)
+DnovPM.GoodSamples = subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")
+
+## Create counts matrix with good replicates only
+DnovPM.dvir1.06.min400count.BRR=subset(DnovPM.dvir1.06.CountsMatrix.min400count, select=DnovPM.GoodReps)
+
+## Create normalized TPM matrix with good replicates only
+DnovPM.dvir1.06.TmmMatrix.BRR=subset(DnovPM.dvir1.06.TmmMatrix, select=DnovPM.GoodReps)
+
+## Rename columns to keep replicate order
+# count matrices
+colnames(DnovPM.dvir1.06.min400count.BRR) = DnovPM.GoodReps
+
+# TPM matrices
+colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.min400count.BRR)
+
+
 #########################################################################################
 ### Summary TPM table and matrix for gene level plots (includes all replicates) ######### 
 
-DnovPM.TPM.tmp<-DnovPM.dvir1.06.TmmMatrix
-colnames(DnovPM.TPM.tmp) <- DnovPM.Samples_data$V1
+DnovPM.TPM.tmp<-DnovPM.dvir1.06.TmmMatrix.BRR
+colnames(DnovPM.TPM.tmp) <- DnovPM.GoodSamples$V1
 m.DnovPM.TPM.tmp <- as.data.frame(melt(as.matrix(DnovPM.TPM.tmp)))
 m.DnovPM.TPM.tmp <- within(m.DnovPM.TPM.tmp, X2<-data.frame(do.call('rbind', strsplit(as.character(X2),'_',fixed=TRUE))))
 m.DnovPM.TPM.tmp<-data.frame(m.DnovPM.TPM.tmp$X1, m.DnovPM.TPM.tmp$X2$X1, m.DnovPM.TPM.tmp$X2$X2, m.DnovPM.TPM.tmp$value)
@@ -134,24 +120,25 @@ TPMse_DnovPM <- merge(fbgn_to_geneName, m.DnovPM.TPM.tmp.c, all=TRUE)
 DnovPM_MeanTPMmatrix<-cast(m.DnovPM.TPM.tmp.c, FBgn_ID~sample+tissue, value ="TPM")
 TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "conspecific", "heterospecific"))
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
+
 ## plot a gene's expression like this:
-plotGenePM_RT(TPMse_DnovPM, "GJ10165")
+plotGenePM(TPMse_DnovPM, "FBgn0200955")
 
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
 rownames(Dnov_virgin_tissue_MeanTPMmatrix) <- Dnov_virgin_tissue_MeanTPMmatrix[,1]
 Dnov_virgin_tissue_MeanTPMmatrix[,1] <- NULL
-Dnov_virgin_Specificity_table = YazSpecificity(Dnov_virgin_tissue_MeanTPMmatrix)
+Dnov_virgin_Specificity_table = calcSpecificity(Dnov_virgin_tissue_MeanTPMmatrix)
 Dnov_virgin_Specificity_table = as.data.frame(Dnov_virgin_Specificity_table)
 
 ########################################## edgeR analysis ###################################################
 ## Define groups for DE analysis.
 # simple way (for pair-wise comparisons):
 
-DnovPM.group <- factor(c(1,1,1,2,2,2,3,3,4,4,5,5,5,6,6,6,7,7,7,8,8,9,9,10,10,10,11,11,12,12,13,13,14,14,14))
+DnovPM.group <- factor(c(1,1,1,2,2,2,3,3,4,4,5,5,6,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,14))
 DnovPM.design <- model.matrix(~0+DnovPM.group)
 colnames(DnovPM.design)<-levels(d$samples$group)
-DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.min400count, group = DnovPM.group)
+DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.min400count.BRR, group = DnovPM.group)
 DnovPM_ExpStd<-calcNormFactors(DnovPM_ExpStd)
 DnovPM_ExpStd<-estimateDisp(DnovPM_ExpStd, DnovPM.design, robust = T)
 DnovPM_fit <- glmFit(DnovPM_ExpStd, DnovPM.design)
@@ -167,7 +154,7 @@ lrt.RT.v.rest.tTags.table <- lrt.RT.v.rest.tTags$table
 Dnov.dvir1.06.RT.list<-rownames(subset(lrt.RT.v.rest.tTags.table, logFC.V_RT.vs.V_CR > 2 & logFC.V_RT.vs.V_H > 2 & logFC.V_RT.vs.V_OV > 2 & FDR<0.001))
 
 Dnov.dvir1.06.RT.matrix <- subset(Dnov_virgin_tissue_MeanTPMmatrix, rownames(Dnov_virgin_tissue_MeanTPMmatrix) %in% Dnov.dvir1.06.RT.list)
-YazHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = T)
+plotHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = T)
 
 # pdf("Plots/Dnov_RT-biased_barPlots.pdf", height = 4)
 # lapply(Dnov.dvir1.06.RT.list, plotGenePM, object = TPMse_DnovPM)
@@ -175,7 +162,7 @@ YazHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = T)
 
 ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
     geom_point(size=2, alpha=0.5, colour = "#7d49c3") + 
-    # geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega), inherit.aes = F, size=2, alpha=0.5, colour = "#4f922a") + 
+    geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega), inherit.aes = F, size=2, alpha=0.5, colour = "#4f922a") + 
     geom_hline(yintercept = 0.15, linetype="dashed", colour = "yellow") + 
     geom_hline(yintercept = 1, linetype="dashed", colour = "gray")  + 
     facet_grid(~chromosome, scales = "free_x") + 
@@ -183,8 +170,8 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grep
     scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + 
     xlab ("Chromosome coordinates (Mb)") + 
     labs(y=expression(K[a]/K[s])) + 
-    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800 & chromosome == "Chr_2"), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") + 
-    # geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") + 
+    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") + 
+    geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") +
     theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
 
 # better way
@@ -194,14 +181,14 @@ rownames(df1) <- df1$replicates
 df1 = subset(df1, select = c(tissue, condition, time))
 
 
-cbind(df1,Group=RT.Group)
+cbind(df1,Group=RT.group)
 design <- model.matrix(~0+RT.Group)
 colnames(design) <- levels(RT.Group)
 
 ########### RT contrasts
 # create RT-specific count matrix and define groups/design
-DnovPM_CountsMatrix_min400_RT = subset(DnovPM.dvir1.06.CountsMatrix.min400count, select=grepl("RT", colnames(DnovPM.dvir1.06.CountsMatrix.min400count)))
-RT.group <- factor(c(1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7))
+DnovPM_CountsMatrix_min400_RT = subset(DnovPM.dvir1.06.min400count.BRR, select=grepl("RT", colnames(DnovPM.dvir1.06.min400count.BRR)))
+RT.group <- factor(c(1,1,1,2,2,2,3,3,4,4,4,5,5,6,6,7,7,7))
 RT.design <- model.matrix(~0+RT.group)
 colnames(RT.design)<-c("C12_RT", "C3_RT", "C6_RT", "H12_RT", "H3_RT", "H6_RT", "V_RT")
 
@@ -219,46 +206,48 @@ het_virgin_contrasts <- makeContrasts(H3.vs.V=H3_RT-V_RT, H6.vs.V=H6_RT-V_RT, H1
 RT_con.3hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C3.vs.V"])
 RT_con.3hrs.vs.virgin.tTags <- topTags(RT_con.3hrs.vs.virgin, n = NULL)
 RT_con.3hrs.vs.virgin.tTags.table <- RT_con.3hrs.vs.virgin.tTags$table
-RT_con.3hrs.vs.virgin.list <- rownames(subset(RT_con.3hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_con.3hrs.vs.virgin.list <- rownames(subset(RT_con.3hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 # identify DE genes: C6_RT vs V_RT
 RT_con.6hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C6.vs.V"])
 RT_con.6hrs.vs.virgin.tTags <- topTags(RT_con.6hrs.vs.virgin, n = NULL)
 RT_con.6hrs.vs.virgin.tTags.table <- RT_con.6hrs.vs.virgin.tTags$table
-RT_con.6hrs.vs.virgin.list <- rownames(subset(RT_con.6hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_con.6hrs.vs.virgin.list <- rownames(subset(RT_con.6hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 # identify DE genes: C12_RT vs V_RT
 RT_con.12hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C12.vs.V"])
 RT_con.12hrs.vs.virgin.tTags <- topTags(RT_con.12hrs.vs.virgin, n = NULL)
 RT_con.12hrs.vs.virgin.tTags.table <- RT_con.12hrs.vs.virgin.tTags$table
-RT_con.12hrs.vs.virgin.list <- rownames(subset(RT_con.12hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_con.12hrs.vs.virgin.list <- rownames(subset(RT_con.12hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 # identify DE genes: H3_RT vs V_RT
 RT_het.3hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H3.vs.V"])
 RT_het.3hrs.vs.virgin.tTags <- topTags(RT_het.3hrs.vs.virgin, n = NULL)
 RT_het.3hrs.vs.virgin.tTags.table <- RT_het.3hrs.vs.virgin.tTags$table
-RT_het.3hrs.vs.virgin.list <- rownames(subset(RT_het.3hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_het.3hrs.vs.virgin.list <- rownames(subset(RT_het.3hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 # identify DE genes: H6_RT vs V_RT
 RT_het.6hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H6.vs.V"])
 RT_het.6hrs.vs.virgin.tTags <- topTags(RT_het.6hrs.vs.virgin, n = NULL)
 RT_het.6hrs.vs.virgin.tTags.table <- RT_het.6hrs.vs.virgin.tTags$table
-RT_het.6hrs.vs.virgin.list <- rownames(subset(RT_het.6hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_het.6hrs.vs.virgin.list <- rownames(subset(RT_het.6hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 # identify DE genes: H12_RT vs V_RT
 RT_het.12hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H12.vs.V"])
 RT_het.12hrs.vs.virgin.tTags <- topTags(RT_het.12hrs.vs.virgin, n = NULL)
 RT_het.12hrs.vs.virgin.tTags.table <- RT_het.12hrs.vs.virgin.tTags$table
-RT_het.12hrs.vs.virgin.list <- rownames(subset(RT_het.12hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.05))
+RT_het.12hrs.vs.virgin.list <- rownames(subset(RT_het.12hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
 
-RT_UP_candidates <- list(Up.at.C3.RT = RT_con.3hrs.vs.virgin.list, 
-                          Up.at.C6.RT = RT_con.6hrs.vs.virgin.list, 
-                          Up.at.C12.RT = RT_con.12hrs.vs.virgin.list,
-                         Up.at.H3.RT = RT_het.3hrs.vs.virgin.list, 
-                         Up.at.H6.RT = RT_het.6hrs.vs.virgin.list, 
-                         Up.at.H12.RT = RT_het.12hrs.vs.virgin.list)
+RT_UP_3hrs_candidates <- list(Conspecific = RT_con.3hrs.vs.virgin.list, 
+                    Heterospecific = RT_het.3hrs.vs.virgin.list)
 
-RT_UP_combs <- unlist(lapply(1:length(RT_UP_candidates), function(j) combn(names(RT_UP_candidates), j, simplify = FALSE)), recursive = FALSE)
-names(RT_UP_combs) <- sapply(RT_UP_combs, function(i) paste0(i, collapse = ","))
-RT_UP_elements <- lapply(RT_UP_combs, function(i) Setdiff(RT_UP_candidates[i], RT_UP_candidates[setdiff(names(RT_UP_candidates), i)]))
+# Rearrange into lists of lists, and partition by species
+RT_UP_3hrs_combs <- unlist(lapply(1:length(RT_UP_3hrs_candidates), function(j) combn(names(RT_UP_3hrs_candidates), j, simplify = FALSE)), recursive = FALSE)
+names(RT_UP_3hrs_combs) <- sapply(RT_UP_3hrs_combs, function(i) paste0(i, collapse = ","))
+RT_UP_3hrs_elements <- lapply(RT_UP_3hrs_combs, function(i) Setdiff(RT_UP_3hrs_candidates[i], RT_UP_3hrs_candidates[setdiff(names(RT_UP_3hrs_candidates), i)]))
 
-RT_UP_candidates_Vdiag<-venn.diagram(RT_UP_candidates, NULL, fill=c("#7d35ae", "#c33d92", "#c471d1", "#c7415f", "#d46c41", "#c8392a"), alpha=c(0.5,0.5,0.5,0.5,0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "RT Upregulated")
-grid.arrange(gTree(children=RT_con_candidates_Vdiag))
+#count elements
+sapply(RT_UP_3hrs_elements, length)
+
+### Draw a VennDiagram of each element
+RT_UP_3hrs_Vdiag<-venn.diagram(RT_UP_3hrs_candidates, NULL, fill=c("#7d35ae", "#c33d92"), alpha=c(0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated at 3hrs")
+grid.arrange(gTree(children=RT_UP_3hrs_Vdiag))
+
 
 
 # Test difference between con- and heterospecific
@@ -304,7 +293,36 @@ dev.off()
 C2inv.qtl = data.frame(xmin=17747413.5, xmax=34500000, ymin=0, ymax = 1.5, chromosome = "Chr_2")
 C5.qtl = data.frame(xmin=c(13800000, 16300000, 22800000), xmax=c(14750000, 21700000, 25000000), ymin=0, ymax = 1.5, chromosome = "Chr_5")
 
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + geom_hline(yintercept = 0.15, linetype="dashed", colour = "red") + geom_hline(yintercept = 1, linetype="dashed", colour = "black") + scale_colour_manual(name = "", values =c("#7d49c3"="#7d49c3","#4f922a"="#4f922a"), labels = c("SFPs","Female RT")) + facet_grid(~chromosome, scales = "free_x") + xlab ("Chromosome coordinates (Mb)") + labs(y=expression(K[a]/K[s])) + theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12), legend.text = element_text(size = 12, face="bold")) + geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill="red"), alpha=0.1, inherit.aes = FALSE) + geom_rect(data=C5.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")+ scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30"))
+Dnov.dvir1.06.RT.list.sigP = unique(subset(Annots, FBgn_ID %in% Dnov.dvir1.06.RT.list & SignalP == "YES"))$FBgn_ID
 
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & chromosome == "Chr_2"), aes(max, omega)) + geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + geom_hline(yintercept = 0.15, linetype="dashed", colour = "black") + geom_hline(yintercept = 1, linetype="dashed", colour = "red") + scale_colour_manual(name = "", values =c("#7d49c3"="#7d49c3","#4f922a"="#4f922a"), labels = c("SFPs","Female RT")) + scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + xlab ("Chromosome coordinates (Mb)") + labs(y=expression(K[a]/K[s])) + geom_text(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800 & chromosome == "Chr_2"), aes(label = gene_name), size =4, colour = "#7d49c3", fontface = "bold.italic", vjust = 1.4, hjust = 0.1) + geom_text(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =4, colour = "#4f922a", fontface = "bold.italic", hjust = 1.1) + theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12), plot.title=element_text(face="bold"), legend.text = element_text(size = 12, face="bold")) + ggtitle("Chromosome 2 (Muller element E)") + geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")
+ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list.sigP & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
+    geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
+    geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + 
+    geom_hline(yintercept = 0.15, linetype="dashed", colour = "red") + 
+    geom_hline(yintercept = 1, linetype="dashed", colour = "black") + 
+    scale_colour_manual(name = "", values =c("#7d49c3"="#7d49c3","#4f922a"="#4f922a"), labels = c("SFPs","Female RT")) + 
+    facet_grid(~chromosome, scales = "free_x") + 
+    xlab ("Chromosome coordinates (Mb)") + 
+    labs(y=expression(K[a]/K[s])) + 
+    theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12), legend.text = element_text(size = 12, face="bold")) + 
+    geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill="red"), alpha=0.1, inherit.aes = FALSE) + 
+    geom_rect(data=C5.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + 
+    scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")+ scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30"))
+
+
+
+## Only chromosome 2
+ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & chromosome == "Chr_2"), aes(max, omega)) + geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
+    geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + 
+    geom_hline(yintercept = 0.15, linetype="dashed", colour = "black") + 
+    geom_hline(yintercept = 1, linetype="dashed", colour = "red") + 
+    scale_colour_manual(name = "", values =c("#7d49c3"="#7d49c3","#4f922a"="#4f922a"), labels = c("SFPs","Female RT")) + 
+    scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + 
+    xlab ("Chromosome coordinates (Mb)") + 
+    labs(y=expression(K[a]/K[s])) + 
+    geom_text(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800 & chromosome == "Chr_2"), aes(label = gene_name), size =4, colour = "#7d49c3", fontface = "bold.italic", vjust = 1.4, hjust = 0.1) + 
+    geom_text(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =4, colour = "#4f922a", fontface = "bold.italic", hjust = 1.1) + 
+    theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12), plot.title=element_text(face="bold"), legend.text = element_text(size = 12, face="bold")) + 
+    ggtitle("Chromosome 2 (Muller element E)") + 
+    geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")
 
