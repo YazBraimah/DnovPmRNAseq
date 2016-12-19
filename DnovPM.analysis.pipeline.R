@@ -124,7 +124,7 @@ TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "c
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
 
 ## plot a gene's expression like this:
-plotGenePM_RT(TPMse_DnovPM, "FBgn0199235")
+plotGenePM(TPMse_DnovPM, "GJ21515")
 
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
@@ -153,10 +153,23 @@ virgin_RT_contrasts<- makeContrasts(V_RT.vs.V_CR=V_RT-V_CR,
                                         V_RT.vs.V_OV=V_RT-V_OV,
                                         levels=DnovPM.design)
 
+virgin_OV_contrasts<- makeContrasts(V_OV.vs.V_CR=V_OV-V_CR, 
+                                    V_OV.vs.V_H=V_OV-V_H,
+                                    V_OV.vs.V_RT=V_OV-V_RT,
+                                    levels=DnovPM.design)
+
+## Find RT-biased genes
 lrt.RT.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_RT_contrasts)
 lrt.RT.v.rest.tTags <- topTags(lrt.RT.v.rest, n = NULL)
 lrt.RT.v.rest.tTags.table <- lrt.RT.v.rest.tTags$table
 Dnov.dvir1.06.RT.list<-rownames(subset(lrt.RT.v.rest.tTags.table, logFC.V_RT.vs.V_CR > 2 & logFC.V_RT.vs.V_H > 2 & logFC.V_RT.vs.V_OV > 2 & FDR<0.001))
+
+## Find OV-biased genes
+lrt.OV.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_OV_contrasts)
+lrt.OV.v.rest.tTags <- topTags(lrt.OV.v.rest, n = NULL)
+lrt.OV.v.rest.tTags.table <- lrt.OV.v.rest.tTags$table
+Dnov.dvir1.06.OV.list<-rownames(subset(lrt.OV.v.rest.tTags.table, logFC.V_OV.vs.V_CR > 2 & logFC.V_OV.vs.V_H > 2 & logFC.V_OV.vs.V_RT > 2 & FDR<0.001))
+
 
 Dnov.dvir1.06.RT.matrix <- subset(Dnov_virgin_tissue_MeanTPMmatrix, rownames(Dnov_virgin_tissue_MeanTPMmatrix) %in% Dnov.dvir1.06.RT.list)
 plotHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = T)
@@ -175,7 +188,8 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grep
     scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + 
     xlab ("Chromosome coordinates (Mb)") + 
     labs(y=expression(K[a]/K[s])) + 
-    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") + 
+    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") +
+    geom_text_repel(data=subset(paml.data, gene_name == "GJ21515"), aes(label = gene_name), size =3, force = 30, colour = "#4f922a") +
     geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") +
     theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
 
@@ -234,20 +248,31 @@ RT_het.12hrs.vs.virgin.tTags <- topTags(RT_het.12hrs.vs.virgin, n = NULL)
 RT_het.12hrs.vs.virgin.tTags.table <- RT_het.12hrs.vs.virgin.tTags$table
 RT_het.12hrs.vs.virgin.list <- rownames(subset(RT_het.12hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 
-RT_UP_3hrs_candidates <- list(Conspecific = RT_con.3hrs.vs.virgin.list, 
-                    Heterospecific = RT_het.3hrs.vs.virgin.list)
+RT_UP_3hrs_candidates <- list(Conspecific = RT_con.3hrs.vs.virgin.list, Heterospecific = RT_het.3hrs.vs.virgin.list)
+RT_UP_6hrs_candidates <- list(Conspecific = RT_con.6hrs.vs.virgin.list, Heterospecific = RT_het.6hrs.vs.virgin.list)
+RT_UP_12hrs_candidates <- list(Conspecific = RT_con.12hrs.vs.virgin.list, Heterospecific = RT_het.12hrs.vs.virgin.list)
 
 # Rearrange into lists of lists, and partition by species
 RT_UP_3hrs_combs <- unlist(lapply(1:length(RT_UP_3hrs_candidates), function(j) combn(names(RT_UP_3hrs_candidates), j, simplify = FALSE)), recursive = FALSE)
+RT_UP_6hrs_combs <- unlist(lapply(1:length(RT_UP_6hrs_candidates), function(j) combn(names(RT_UP_6hrs_candidates), j, simplify = FALSE)), recursive = FALSE)
+RT_UP_12hrs_combs <- unlist(lapply(1:length(RT_UP_12hrs_candidates), function(j) combn(names(RT_UP_12hrs_candidates), j, simplify = FALSE)), recursive = FALSE)
+
 names(RT_UP_3hrs_combs) <- sapply(RT_UP_3hrs_combs, function(i) paste0(i, collapse = ","))
+names(RT_UP_6hrs_combs) <- sapply(RT_UP_6hrs_combs, function(i) paste0(i, collapse = ","))
+names(RT_UP_12hrs_combs) <- sapply(RT_UP_12hrs_combs, function(i) paste0(i, collapse = ","))
+
 RT_UP_3hrs_elements <- lapply(RT_UP_3hrs_combs, function(i) Setdiff(RT_UP_3hrs_candidates[i], RT_UP_3hrs_candidates[setdiff(names(RT_UP_3hrs_candidates), i)]))
+RT_UP_6hrs_elements <- lapply(RT_UP_6hrs_combs, function(i) Setdiff(RT_UP_6hrs_candidates[i], RT_UP_6hrs_candidates[setdiff(names(RT_UP_6hrs_candidates), i)]))
+RT_UP_12hrs_elements <- lapply(RT_UP_12hrs_combs, function(i) Setdiff(RT_UP_12hrs_candidates[i], RT_UP_12hrs_candidates[setdiff(names(RT_UP_12hrs_candidates), i)]))
 
 #count elements
 sapply(RT_UP_3hrs_elements, length)
 
 ### Draw a VennDiagram of each element
 RT_UP_3hrs_Vdiag<-venn.diagram(RT_UP_3hrs_candidates, NULL, fill=c("#7d35ae", "#c33d92"), alpha=c(0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated at 3hrs")
-grid.arrange(gTree(children=RT_UP_3hrs_Vdiag))
+RT_UP_6hrs_Vdiag<-venn.diagram(RT_UP_6hrs_candidates, NULL, fill=c("#7d35ae", "#c33d92"), alpha=c(0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated at 6hrs")
+RT_UP_12hrs_Vdiag<-venn.diagram(RT_UP_12hrs_candidates, NULL, fill=c("#7d35ae", "#c33d92"), alpha=c(0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated at 12hrs")
+grid.arrange(gTree(children=RT_UP_3hrs_Vdiag), gTree(children=RT_UP_6hrs_Vdiag), gTree(children=RT_UP_12hrs_Vdiag))
 
 
 
@@ -328,3 +353,81 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & chro
     ggtitle("Chromosome 2 (Muller element E)") + 
     geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")
 
+
+###########
+###########
+
+# create gene lists and factor labeling
+RT_factors = as.data.frame(Dnov.dvir1.06.RT.list)
+RT_factors$V1 = "RT-biased"
+rownames(RT_factors) = Dnov.dvir1.06.RT.list
+RT_factors = subset(RT_factors, select = "V1")
+
+OV_factors = as.data.frame(Dnov.dvir1.06.OV.list)
+OV_factors$V1 = "OV-biased"
+rownames(OV_factors) = Dnov.dvir1.06.OV.list
+OV_factors = subset(OV_factors, select = "V1")
+
+factor_labeling = rbind(RT_factors, OV_factors)
+colnames(factor_labeling) = c('type')
+factor_list = unique(factor_labeling[,1])
+
+cat_genes_vec = as.integer(features_with_GO %in% rownames(factor_labeling))
+pwf=nullp(cat_genes_vec,bias.data=lengths_features_with_GO)
+rownames(pwf) = names(GO_info_listed)
+
+GO_enriched_list = list()
+
+for (feature_cat in factor_list) {
+    message('Processing category: ', feature_cat)
+    cat_genes_vec = as.integer(features_with_GO %in% rownames(factor_labeling)[factor_labeling$type == feature_cat])
+    pwf$DEgenes = cat_genes_vec
+    res = goseq(pwf,gene2cat=GO_info_listed)
+    ## over-represented categories:
+    pvals = res$over_represented_pvalue
+    pvals[pvals > 1 -1e-10] = 1-1e-10
+    q = qvalue(pvals)
+    res$over_represented_FDR = q$qvalues
+    go_enrich_factor = feature_cat
+    enrich_result_table = res[res$over_represented_pvalue<=0.05,]
+    descr = unlist(lapply(enrich_result_table$category, get_GO_term_descr))
+    enrich_result_table$go_term = descr
+    enrich_result_table$factor = go_enrich_factor
+    GO_enriched_list[[feature_cat]] = enrich_result_table
+}
+
+GO_enrichment_data = rbindlist(GO_enriched_list)
+
+
+ggplot(subset(GO_enrichment_data, over_represented_FDR < 0.01 & factor == "RT-biased"), 
+       aes(category, -log10(over_represented_pvalue), size = numDEInCat, colour = ontology)) + 
+    geom_point()  + 
+    xlab(NULL) + 
+    geom_text_repel(data = subset(GO_enrichment_data, over_represented_FDR < 0.01 & factor == "RT-biased" & numDEInCat > 20), 
+                    aes(category, -log10(over_represented_pvalue),label=term), 
+                    force = 20, 
+                    inherit.aes = F, 
+                    box.padding = unit(0.35, "lines"), 
+                    point.padding = unit(0.5, "lines"), 
+                    fontface = "bold", 
+                    size = 3) + 
+    theme(axis.text.x = element_text(angle = 45, face = "bold", vjust = 1, hjust = 1)) + 
+    scale_size(range = c(0,12)) + 
+    scale_colour_manual(values=c("#c27d92", "#a8a34b", "#8e61bf")) + 
+    scale_y_continuous(limits=c(3, 10))
+
+
+
+###########
+
+## Get DE genes that are RT-biased:
+## Here they are: FBgn0200179, FBgn0197453, 
+at3hrs=unique(subset(TPMse_DnovPM, FBgn_ID %in% unlist(RT_UP_3hrs_elements) & FBgn_ID %in% Dnov.dvir1.06.RT.list)$FBgn_ID)
+at6hrs=unique(subset(TPMse_DnovPM, FBgn_ID %in% unlist(RT_UP_6hrs_elements) & FBgn_ID %in% Dnov.dvir1.06.RT.list)$FBgn_ID)
+at12hrs=unique(subset(TPMse_DnovPM, FBgn_ID %in% unlist(RT_UP_12hrs_elements) & FBgn_ID %in% Dnov.dvir1.06.RT.list)$FBgn_ID)
+TheGenes = union(at3hrs, union(at6hrs, at12hrs))
+
+pdf(file = "~/Desktop/union.ofRT.pdf",width = 5.64, height = 2.75)
+lapply(TheGenes, plotGenePM_RT, object = TPMse_DnovPM)
+dev.off()
+lapply(TheGenes, plotGeneG, object = TPMse)
