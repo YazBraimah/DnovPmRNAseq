@@ -25,7 +25,7 @@ MA_BPlot <- function(data, col1, col2) {
     res = data.frame(row.names(data),x=M, y=A, row.names = 1)
     res$bins <- cut(x=res$y, breaks=seq(from=0, to=20, by = 0.5), labels=as.character(seq(0.5,20,0.5)))
     res$count = 1
-    bad.res = subset(res, x >= 2 | x <= -2)
+    bad.res = subset(res, x >= 1 | x <= -1)
     bad.res = subset(bad.res, x != Inf & x != (-Inf))
     badBygroup = tapply(bad.res$count, bad.res$bins, sum)
     allBygroup = tapply(res$count, res$bins, sum)
@@ -36,8 +36,8 @@ MA_BPlot <- function(data, col1, col2) {
     off.2fold$log2Bin <- factor(off.2fold$log2Bin, levels=as.character(seq(0.5,20,0.5)))
     b.plot <- ggplot(off.2fold, aes(log2Bin, off.2fold)) + geom_bar(stat = "identity", fill="#F8766D", colour = "#00BFC4") + labs(y="prop. >2-fold", x="log2 read count bin") + theme(legend.position="none") + labs(title = paste(col1, "vs", col2, sep = " "), face = "bold")
     res$FC = NA
-    res$FC[res$x > 2 ] = "above" 
-    res$FC[res$x < -2 ] = "above"
+    res$FC[res$x > 1 ] = "above" 
+    res$FC[res$x < -1 ] = "above"
     ma.plot = ggplot(res, aes(y, x, colour = FC)) + geom_point() + labs(y = "M [log2(x/y)]", x = "A [0.5xlog2(xy)]")+ scale_x_continuous(limits=c(0,20)) + theme(legend.position="none")
     #ma.plot = qplot(y, x, data = res, colour = FC, ylab = "M [log2(x/y)]", xlab = "A [0.5xlog2(xy)]") + scale_x_continuous(limits=c(0,20)) + theme(legend.position="none")
     plots = plot_grid(b.plot, ma.plot, ncol = 1)
