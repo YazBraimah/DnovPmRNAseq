@@ -35,7 +35,8 @@ m.expData<-data.frame(m.expData, m.expData.exp$replicate$X1, m.expData.exp$repli
 colnames(m.expData) <- c("gene_id", "replicate", "TPM", "sample", "tissue", "rep_num")
 m.expData$TPM <- m.expData$TPM + 1
 ggplot(m.expData) + 
-    geom_boxplot(aes(x = replicate, y = log10(TPM), fill = tissue, colour = sample), size = 0.3, alpha = I(1/3)) + 
+    geom_boxplot(aes(x = replicate, y = log10(TPM), fill = sample), size = 0.3, alpha = I(1/3)) + 
+    facet_wrap(~tissue, scales = "free_x") +
     theme(axis.text.x = element_text(angle = -90, hjust = 0)) + 
     scale_fill_hue(l = 50, h.start = 200)
 
@@ -48,8 +49,9 @@ print(DnovPM_fit)
 # plot it
 ggplot(DnovPM.dvir1.06.TpmMatrix.cbmt, aes(neg_min_tpm,num_features)) + geom_point() + scale_x_continuous(limits=c(-100,0)) + scale_y_continuous(limits=c(0,20000)) + geom_smooth(data=DnovPM_filt_data, method = "lm") + geom_hline(yintercept = 9185, colour = "green") + ggtitle("dvir1.06")
 
+
 ## calculate dispersion
-d <- DGEList(counts = DnovPM.dvir1.06.min400count.BRR, group = DnovPM.GoodSamples$V1)
+d <- DGEList(counts = DnovPM.dvir1.06.CountsMatrix, group = DnovPM.Samples_data$V1)
 d <- calcNormFactors(d)
 d <- estimateCommonDisp(d)
 d <- estimateTagwiseDisp(d)
@@ -60,7 +62,7 @@ plotBCV(d)
 plotMDS(d, method = "bcv", col=as.numeric(d$samples$group))
 
 ## Plot sample correlation
-data = log2(DnovPM.dvir1.06.min400count.BRR+1)
+data = log2(DnovPM.dvir1.06.CountsMatrix+1)
 data = as.matrix(data)
 sample_cor = cor(data, method='pearson', use='pairwise.complete.obs')
 sample_dist = as.dist(1-sample_cor)
@@ -74,7 +76,7 @@ DnovPMCountData_normByDESeq = newCountDataSet(DnovPMCountData, meta)
 DnovPMCountData_normByDESeq = estimateSizeFactors(DnovPMCountData_normByDESeq)
 DnovPMCountData_normByDESeq = data.frame(counts(DnovPMCountData_normByDESeq, normalized=T))
 
-MA_BPlot(DnovPMCountData_normByDESeq, "C6_RT_3", "C6_RT_2")
+MA_BPlot(DnovPMCountData_normByDESeq, "H12_RT_3", "H12_RT_2")
 
 ## Filter count data by minimum count across ANY sample
 DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix, 1, max)
@@ -90,17 +92,17 @@ DnovPM.GoodReps = as.character(subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 
 DnovPM.GoodSamples = subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")
 
 ## Create counts matrix with good replicates only
-DnovPM.dvir1.06.min400count.BRR=subset(DnovPM.dvir1.06.CountsMatrix.min400count, select=DnovPM.GoodReps)
+DnovPM.dvir1.06.CountsMatrix.min400count.BRR=subset(DnovPM.dvir1.06.CountsMatrix.min400count, select=DnovPM.GoodReps)
 
 ## Create normalized TPM matrix with good replicates only
 DnovPM.dvir1.06.TmmMatrix.BRR=subset(DnovPM.dvir1.06.TmmMatrix, select=DnovPM.GoodReps)
 
 ## Rename columns to keep replicate order
 # count matrices
-colnames(DnovPM.dvir1.06.min400count.BRR) = DnovPM.GoodReps
+colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR) = DnovPM.GoodReps
 
 # TPM matrices
-colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.min400count.BRR)
+colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR)
 
 
 #########################################################################################
@@ -122,7 +124,7 @@ TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "c
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
 
 ## plot a gene's expression like this:
-plotGenePM(TPMse_DnovPM, "FBgn0200955")
+plotGenePM_RT(TPMse_DnovPM, "FBgn0199235")
 
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
@@ -135,12 +137,15 @@ Dnov_virgin_Specificity_table = as.data.frame(Dnov_virgin_Specificity_table)
 ## Define groups for DE analysis.
 # simple way (for pair-wise comparisons):
 
+## calculate dispersion
 DnovPM.group <- factor(c(1,1,1,2,2,2,3,3,4,4,5,5,6,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,14))
 DnovPM.design <- model.matrix(~0+DnovPM.group)
-colnames(DnovPM.design)<-levels(d$samples$group)
-DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.min400count.BRR, group = DnovPM.group)
+colnames(DnovPM.design)<-levels(DnovPM.GoodSamples$V1)
+
+DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.min400count.BRR, group = DnovPM.group)
 DnovPM_ExpStd<-calcNormFactors(DnovPM_ExpStd)
 DnovPM_ExpStd<-estimateDisp(DnovPM_ExpStd, DnovPM.design, robust = T)
+
 DnovPM_fit <- glmFit(DnovPM_ExpStd, DnovPM.design)
 
 virgin_RT_contrasts<- makeContrasts(V_RT.vs.V_CR=V_RT-V_CR, 
@@ -174,26 +179,22 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grep
     geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") +
     theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
 
-# better way
-df1 = subset(m.DnovPM.TPM.tmp, FBgn_ID == "FBgn0202928")
-df1$replicates = DnovPM.Samples_data$V2
-rownames(df1) <- df1$replicates
-df1 = subset(df1, select = c(tissue, condition, time))
-
-
-cbind(df1,Group=RT.group)
-design <- model.matrix(~0+RT.Group)
-colnames(design) <- levels(RT.Group)
 
 ########### RT contrasts
 # create RT-specific count matrix and define groups/design
-DnovPM_CountsMatrix_min400_RT = subset(DnovPM.dvir1.06.min400count.BRR, select=grepl("RT", colnames(DnovPM.dvir1.06.min400count.BRR)))
+DnovPM_CountsMatrix_RT = subset(DnovPM.dvir1.06.CountsMatrix.min400count.BRR, select=grepl("RT", colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR)))
+
+## filter this matrix by minimum read count
+DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix.min400count.BRR, 1, max)
+DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT = DnovPM_CountsMatrix_RT[DnovPM_max_gene_expr_per_row >= 400,,drop=F ]
+
+######
 RT.group <- factor(c(1,1,1,2,2,2,3,3,4,4,4,5,5,6,6,7,7,7))
 RT.design <- model.matrix(~0+RT.group)
 colnames(RT.design)<-c("C12_RT", "C3_RT", "C6_RT", "H12_RT", "H3_RT", "H6_RT", "V_RT")
 
 # create edgeR DE object and run glm
-DnovPM_DGElist_RT<-DGEList(counts = DnovPM_CountsMatrix_min400_RT, group = RT.group)
+DnovPM_DGElist_RT<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT, group = RT.group)
 DnovPM_DGElist_RT<-calcNormFactors(DnovPM_DGElist_RT)
 DnovPM_DGElist_RT<-estimateDisp(DnovPM_DGElist_RT, RT.design, robust = T)
 DnovPM_RT_fit <- glmFit(DnovPM_DGElist_RT, RT.design)
@@ -206,32 +207,32 @@ het_virgin_contrasts <- makeContrasts(H3.vs.V=H3_RT-V_RT, H6.vs.V=H6_RT-V_RT, H1
 RT_con.3hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C3.vs.V"])
 RT_con.3hrs.vs.virgin.tTags <- topTags(RT_con.3hrs.vs.virgin, n = NULL)
 RT_con.3hrs.vs.virgin.tTags.table <- RT_con.3hrs.vs.virgin.tTags$table
-RT_con.3hrs.vs.virgin.list <- rownames(subset(RT_con.3hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_con.3hrs.vs.virgin.list <- rownames(subset(RT_con.3hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 # identify DE genes: C6_RT vs V_RT
 RT_con.6hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C6.vs.V"])
 RT_con.6hrs.vs.virgin.tTags <- topTags(RT_con.6hrs.vs.virgin, n = NULL)
 RT_con.6hrs.vs.virgin.tTags.table <- RT_con.6hrs.vs.virgin.tTags$table
-RT_con.6hrs.vs.virgin.list <- rownames(subset(RT_con.6hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_con.6hrs.vs.virgin.list <- rownames(subset(RT_con.6hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 # identify DE genes: C12_RT vs V_RT
 RT_con.12hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C12.vs.V"])
 RT_con.12hrs.vs.virgin.tTags <- topTags(RT_con.12hrs.vs.virgin, n = NULL)
 RT_con.12hrs.vs.virgin.tTags.table <- RT_con.12hrs.vs.virgin.tTags$table
-RT_con.12hrs.vs.virgin.list <- rownames(subset(RT_con.12hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_con.12hrs.vs.virgin.list <- rownames(subset(RT_con.12hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 # identify DE genes: H3_RT vs V_RT
 RT_het.3hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H3.vs.V"])
 RT_het.3hrs.vs.virgin.tTags <- topTags(RT_het.3hrs.vs.virgin, n = NULL)
 RT_het.3hrs.vs.virgin.tTags.table <- RT_het.3hrs.vs.virgin.tTags$table
-RT_het.3hrs.vs.virgin.list <- rownames(subset(RT_het.3hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_het.3hrs.vs.virgin.list <- rownames(subset(RT_het.3hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 # identify DE genes: H6_RT vs V_RT
 RT_het.6hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H6.vs.V"])
 RT_het.6hrs.vs.virgin.tTags <- topTags(RT_het.6hrs.vs.virgin, n = NULL)
 RT_het.6hrs.vs.virgin.tTags.table <- RT_het.6hrs.vs.virgin.tTags$table
-RT_het.6hrs.vs.virgin.list <- rownames(subset(RT_het.6hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_het.6hrs.vs.virgin.list <- rownames(subset(RT_het.6hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 # identify DE genes: H12_RT vs V_RT
 RT_het.12hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts[,"H12.vs.V"])
 RT_het.12hrs.vs.virgin.tTags <- topTags(RT_het.12hrs.vs.virgin, n = NULL)
 RT_het.12hrs.vs.virgin.tTags.table <- RT_het.12hrs.vs.virgin.tTags$table
-RT_het.12hrs.vs.virgin.list <- rownames(subset(RT_het.12hrs.vs.virgin.tTags.table, logFC > 2 & FDR < 0.001))
+RT_het.12hrs.vs.virgin.list <- rownames(subset(RT_het.12hrs.vs.virgin.tTags.table, logFC > 1 & FDR < 0.001))
 
 RT_UP_3hrs_candidates <- list(Conspecific = RT_con.3hrs.vs.virgin.list, 
                     Heterospecific = RT_het.3hrs.vs.virgin.list)
@@ -252,7 +253,7 @@ grid.arrange(gTree(children=RT_UP_3hrs_Vdiag))
 
 # Test difference between con- and heterospecific
 condition.group = subset(m.DnovPM.TPM.tmp, FBgn_ID == "FBgn0202928" & tissue == "RT")
-condition.group$replicates = colnames(DnovPM_CountsMatrix_min400_RT)
+condition.group$replicates = colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT)
 rownames(condition.group) <- condition.group$replicates
 condition.group = subset(condition.group, select = c(sample, condition, time))
 
@@ -295,7 +296,7 @@ C5.qtl = data.frame(xmin=c(13800000, 16300000, 22800000), xmax=c(14750000, 21700
 
 Dnov.dvir1.06.RT.list.sigP = unique(subset(Annots, FBgn_ID %in% Dnov.dvir1.06.RT.list & SignalP == "YES"))$FBgn_ID
 
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list.sigP & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
+ggplot(subset(paml.data, FBgn_ID %in% RT_het.12hrs.vs.virgin.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
     geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
     geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + 
     geom_hline(yintercept = 0.15, linetype="dashed", colour = "red") + 
@@ -312,7 +313,8 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list.sigP & omega < 800 &
 
 
 ## Only chromosome 2
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & chromosome == "Chr_2"), aes(max, omega)) + geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
+ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & chromosome == "Chr_2"), aes(max, omega)) + 
+    geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
     geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + 
     geom_hline(yintercept = 0.15, linetype="dashed", colour = "black") + 
     geom_hline(yintercept = 1, linetype="dashed", colour = "red") + 
