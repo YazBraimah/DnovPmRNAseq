@@ -47,7 +47,12 @@ DnovPM_filt_data = DnovPM.dvir1.06.TpmMatrix.cbmt[DnovPM.dvir1.06.TpmMatrix.cbmt
 DnovPM_fit = lm(DnovPM_filt_data[,2] ~ DnovPM_filt_data[,1])
 print(DnovPM_fit)
 # plot it
-ggplot(DnovPM.dvir1.06.TpmMatrix.cbmt, aes(neg_min_tpm,num_features)) + geom_point() + scale_x_continuous(limits=c(-100,0)) + scale_y_continuous(limits=c(0,20000)) + geom_smooth(data=DnovPM_filt_data, method = "lm") + geom_hline(yintercept = 9185, colour = "green") + ggtitle("dvir1.06")
+ggplot(DnovPM.dvir1.06.TpmMatrix.cbmt, aes(neg_min_tpm,num_features)) + 
+    geom_point() + 
+    scale_x_continuous(limits=c(-100,0)) + 
+    scale_y_continuous(limits=c(0,20000)) + 
+    geom_smooth(data=DnovPM_filt_data, method = "lm") + 
+    geom_hline(yintercept = 9185, colour = "green") + ggtitle("expressed genes", subtitle = "something")
 
 
 ## calculate dispersion
@@ -76,7 +81,7 @@ DnovPMCountData_normByDESeq = newCountDataSet(DnovPMCountData, meta)
 DnovPMCountData_normByDESeq = estimateSizeFactors(DnovPMCountData_normByDESeq)
 DnovPMCountData_normByDESeq = data.frame(counts(DnovPMCountData_normByDESeq, normalized=T))
 
-MA_BPlot(DnovPMCountData_normByDESeq, "H12_RT_3", "H12_RT_2")
+MA_BPlot(DnovPMCountData_normByDESeq, "H3_RT_3", "H3_RT_1")
 
 ## Filter count data by minimum count across ANY sample
 DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix, 1, max)
@@ -92,17 +97,17 @@ DnovPM.GoodReps = as.character(subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 
 DnovPM.GoodSamples = subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")
 
 ## Create counts matrix with good replicates only
-DnovPM.dvir1.06.CountsMatrix.min400count.BRR=subset(DnovPM.dvir1.06.CountsMatrix.min400count, select=DnovPM.GoodReps)
+DnovPM.dvir1.06.CountsMatrix.BRR=subset(DnovPM.dvir1.06.CountsMatrix, select=DnovPM.GoodReps)
 
 ## Create normalized TPM matrix with good replicates only
 DnovPM.dvir1.06.TmmMatrix.BRR=subset(DnovPM.dvir1.06.TmmMatrix, select=DnovPM.GoodReps)
 
 ## Rename columns to keep replicate order
 # count matrices
-colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR) = DnovPM.GoodReps
+colnames(DnovPM.dvir1.06.CountsMatrix.BRR) = DnovPM.GoodReps
 
 # TPM matrices
-colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR)
+colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.CountsMatrix.BRR)
 
 
 #########################################################################################
