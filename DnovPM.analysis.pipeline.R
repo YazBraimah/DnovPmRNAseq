@@ -81,7 +81,7 @@ DnovPMCountData_normByDESeq = newCountDataSet(DnovPMCountData, meta)
 DnovPMCountData_normByDESeq = estimateSizeFactors(DnovPMCountData_normByDESeq)
 DnovPMCountData_normByDESeq = data.frame(counts(DnovPMCountData_normByDESeq, normalized=T))
 
-MA_BPlot(DnovPMCountData_normByDESeq, "H3_RT_3", "H3_RT_1")
+MA_BPlot(DnovPMCountData_normByDESeq, "C6_RT_3", "C6_RT_1")
 
 ## Filter count data by minimum count across ANY sample
 DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix, 1, max)
@@ -111,7 +111,7 @@ colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.CountsMatrix.
 
 
 #########################################################################################
-### Summary TPM table and matrix for gene level plots (includes all replicates) ######### 
+### Summary TPM table and matrix for gene level plots (includes good replicates only) ######### 
 
 DnovPM.TPM.tmp<-DnovPM.dvir1.06.TmmMatrix.BRR
 colnames(DnovPM.TPM.tmp) <- DnovPM.GoodSamples$V1
@@ -129,7 +129,7 @@ TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "c
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
 
 ## plot a gene's expression like this:
-plotGenePM(TPMse_DnovPM, "GJ21515")
+plotGenePM(TPMse_DnovPM, "GJ10165")
 
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
@@ -147,7 +147,11 @@ DnovPM.group <- factor(c(1,1,1,2,2,2,3,3,4,4,5,5,6,6,6,7,7,8,8,9,9,10,10,11,11,1
 DnovPM.design <- model.matrix(~0+DnovPM.group)
 colnames(DnovPM.design)<-levels(DnovPM.GoodSamples$V1)
 
-DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.min400count.BRR, group = DnovPM.group)
+## Filter count data by minimum count across ANY sample
+DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix.BRR, 1, max)
+DnovPM.dvir1.06.CountsMatrix.BRR.min400count = DnovPM.dvir1.06.CountsMatrix.BRR[DnovPM_max_gene_expr_per_row >= 400,,drop=F ]
+
+DnovPM_ExpStd<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.BRR.min400count, group = DnovPM.group)
 DnovPM_ExpStd<-calcNormFactors(DnovPM_ExpStd)
 DnovPM_ExpStd<-estimateDisp(DnovPM_ExpStd, DnovPM.design, robust = T)
 
@@ -163,6 +167,11 @@ virgin_OV_contrasts<- makeContrasts(V_OV.vs.V_CR=V_OV-V_CR,
                                     V_OV.vs.V_RT=V_OV-V_RT,
                                     levels=DnovPM.design)
 
+virgin_H_contrasts<- makeContrasts(V_H.vs.V_CR=V_H-V_CR, 
+                                    V_H.vs.V_OV=V_H-V_OV,
+                                    V_H.vs.V_RT=V_H-V_RT,
+                                    levels=DnovPM.design)
+
 ## Find RT-biased genes
 lrt.RT.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_RT_contrasts)
 lrt.RT.v.rest.tTags <- topTags(lrt.RT.v.rest, n = NULL)
@@ -174,6 +183,12 @@ lrt.OV.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_OV_contrasts)
 lrt.OV.v.rest.tTags <- topTags(lrt.OV.v.rest, n = NULL)
 lrt.OV.v.rest.tTags.table <- lrt.OV.v.rest.tTags$table
 Dnov.dvir1.06.OV.list<-rownames(subset(lrt.OV.v.rest.tTags.table, logFC.V_OV.vs.V_CR > 2 & logFC.V_OV.vs.V_H > 2 & logFC.V_OV.vs.V_RT > 2 & FDR<0.001))
+
+## Find H-biased genes
+lrt.H.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_H_contrasts)
+lrt.H.v.rest.tTags <- topTags(lrt.H.v.rest, n = NULL)
+lrt.H.v.rest.tTags.table <- lrt.H.v.rest.tTags$table
+Dnov.dvir1.06.H.list<-rownames(subset(lrt.H.v.rest.tTags.table, logFC.V_H.vs.V_CR > 2 & logFC.V_H.vs.V_OV > 2 & logFC.V_H.vs.V_RT > 2 & FDR<0.001))
 
 
 Dnov.dvir1.06.RT.matrix <- subset(Dnov_virgin_tissue_MeanTPMmatrix, rownames(Dnov_virgin_tissue_MeanTPMmatrix) %in% Dnov.dvir1.06.RT.list)
@@ -201,11 +216,11 @@ ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grep
 
 ########### RT contrasts
 # create RT-specific count matrix and define groups/design
-DnovPM_CountsMatrix_RT = subset(DnovPM.dvir1.06.CountsMatrix.min400count.BRR, select=grepl("RT", colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR)))
+DnovPM_CountsMatrix_RT = subset(DnovPM.dvir1.06.CountsMatrix.BRR.min400count, select=grepl("RT", colnames(DnovPM.dvir1.06.CountsMatrix.BRR.min400count)))
 
 ## filter this matrix by minimum read count
-DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix.min400count.BRR, 1, max)
-DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT = DnovPM_CountsMatrix_RT[DnovPM_max_gene_expr_per_row >= 400,,drop=F ]
+DnovPM_max_gene_expr_per_row = apply(DnovPM_CountsMatrix_RT, 1, max)
+DnovPM_CountsMatrix_RT.min400 = DnovPM_CountsMatrix_RT[DnovPM_max_gene_expr_per_row >= 200,,drop=F ]
 
 ######
 RT.group <- factor(c(1,1,1,2,2,2,3,3,4,4,4,5,5,6,6,7,7,7))
@@ -213,7 +228,7 @@ RT.design <- model.matrix(~0+RT.group)
 colnames(RT.design)<-c("C12_RT", "C3_RT", "C6_RT", "H12_RT", "H3_RT", "H6_RT", "V_RT")
 
 # create edgeR DE object and run glm
-DnovPM_DGElist_RT<-DGEList(counts = DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT, group = RT.group)
+DnovPM_DGElist_RT<-DGEList(counts = DnovPM_CountsMatrix_RT.min400, group = RT.group)
 DnovPM_DGElist_RT<-calcNormFactors(DnovPM_DGElist_RT)
 DnovPM_DGElist_RT<-estimateDisp(DnovPM_DGElist_RT, RT.design, robust = T)
 DnovPM_RT_fit <- glmFit(DnovPM_DGElist_RT, RT.design)
@@ -222,6 +237,23 @@ DnovPM_RT_fit <- glmFit(DnovPM_DGElist_RT, RT.design)
 con_virgin_contrasts <- makeContrasts(C3.vs.V=C3_RT-V_RT, C6.vs.V=C6_RT-V_RT, C12.vs.V=C12_RT-V_RT, levels = RT.design)
 het_virgin_contrasts <- makeContrasts(H3.vs.V=H3_RT-V_RT, H6.vs.V=H6_RT-V_RT, H12.vs.V=H12_RT-V_RT, levels = RT.design)
 
+# identify overall con_vs_het
+RT_con.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts)
+RT_con.vs.virgin.tTags <- topTags(RT_con.vs.virgin, n = NULL)
+RT_con.vs.virgin.tTags.table <- RT_con.vs.virgin.tTags$table
+RT_con.vs.virgin.tTags.table$FBgn_ID <- rownames(RT_con.vs.virgin.tTags.table)
+
+
+RT_het.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = het_virgin_contrasts)
+RT_het.vs.virgin.tTags <- topTags(RT_het.vs.virgin, n = NULL)
+RT_het.vs.virgin.tTags.table <- RT_het.vs.virgin.tTags$table
+RT_het.vs.virgin.tTags.table$FBgn_ID <- rownames(RT_het.vs.virgin.tTags.table)
+tmpDF = merge(RT_het.vs.virgin.tTags.table, fbgn_to_geneName)
+
+plot_ly(subset(RT_con.vs.virgin.tTags.table, FDR < 0.05), x = ~logFC.C3.vs.V, y = ~logFC.C6.vs.V,z = ~logFC.C12.vs.V, color = ~logCPM, text = ~gene_name)
+plot_ly(subset(tmpDF, FDR < 0.05), x = ~logFC.H3.vs.V, y = ~logFC.H6.vs.V,z = ~logFC.H12.vs.V, color = ~logCPM, text = ~gene_name)
+
+# Pairwise contrasts
 # identify DE genes: C3_RT vs V_RT
 RT_con.3hrs.vs.virgin <- glmLRT(DnovPM_RT_fit, contrast = con_virgin_contrasts[,"C3.vs.V"])
 RT_con.3hrs.vs.virgin.tTags <- topTags(RT_con.3hrs.vs.virgin, n = NULL)
@@ -271,7 +303,7 @@ RT_UP_6hrs_elements <- lapply(RT_UP_6hrs_combs, function(i) Setdiff(RT_UP_6hrs_c
 RT_UP_12hrs_elements <- lapply(RT_UP_12hrs_combs, function(i) Setdiff(RT_UP_12hrs_candidates[i], RT_UP_12hrs_candidates[setdiff(names(RT_UP_12hrs_candidates), i)]))
 
 #count elements
-sapply(RT_UP_3hrs_elements, length)
+sapply(RT_UP_12hrs_elements, length)
 
 ### Draw a VennDiagram of each element
 RT_UP_3hrs_Vdiag<-venn.diagram(RT_UP_3hrs_candidates, NULL, fill=c("#7d35ae", "#c33d92"), alpha=c(0.5,0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated at 3hrs")
@@ -283,7 +315,7 @@ grid.arrange(gTree(children=RT_UP_3hrs_Vdiag), gTree(children=RT_UP_6hrs_Vdiag),
 
 # Test difference between con- and heterospecific
 condition.group = subset(m.DnovPM.TPM.tmp, FBgn_ID == "FBgn0202928" & tissue == "RT")
-condition.group$replicates = colnames(DnovPM.dvir1.06.CountsMatrix.min400count.BRR_RT)
+condition.group$replicates = colnames(DnovPM_CountsMatrix_RT.min400)
 rownames(condition.group) <- condition.group$replicates
 condition.group = subset(condition.group, select = c(sample, condition, time))
 
@@ -312,12 +344,12 @@ con.vs.vir.RT.all.tTags <- topTags(con.vs.vir.RT.all.contrast, n = NULL)
 con.vs.vir.RT.all.tTags.table <- con.vs.vir.RT.all.tTags$table
 con.vs.vir.RT.all.list <- rownames(subset(con.vs.vir.RT.all.tTags.table, logFC > 1 & FDR < 0.05))
 
-PM.vs.vir_candidates <- list(conspecific = con.vs.vir.RT.all.list, heterospecific = het.vs.vir.RT.all.list, between = con.vs.het.RT.all.list)
+PM.vs.vir_candidates <- list(heterospecific = het.vs.vir.RT.all.list, between = con.vs.het.RT.all.list, conspecific = con.vs.vir.RT.all.list)
 
 PM.vs.vir_candidates_Vdiag<-venn.diagram(PM.vs.vir_candidates, NULL, fill=c("#7d35ae", "#c7415f", "#d46c41"), alpha=c(0.5,0.5, 0.5), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "RT Upregulated")
 grid.arrange(gTree(children=PM.vs.vir_candidates_Vdiag))
 
-pdf("Plots/con.vs.het.RT.all.list.pdf", height = 4)
+pdf("con.vs.het.RT.all.list.pdf", height = 4)
 lapply(con.vs.het.RT.all.list, plotGenePM_RT, object = TPMse_DnovPM)
 dev.off()
 
