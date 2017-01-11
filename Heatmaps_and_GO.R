@@ -97,7 +97,7 @@ ggplot(subset(GO_enrichment_data, over_represented_FDR < 0.05 & factor == "RT-bi
        aes(category, -log10(over_represented_pvalue), size = numDEInCat, colour = ontology)) + 
     geom_point()  + 
     xlab(NULL) + 
-    geom_text_repel(data = subset(GO_enrichment_data, numDEInCat > 20 & factor == "RT-biased" & ontology == 'MF'), 
+    geom_text_repel(data = subset(GO_enrichment_data, factor == "RT-biased" & over_represented_FDR < 0.05), 
                     aes(category, -log10(over_represented_pvalue),label=term), 
                     force = 8, 
                     inherit.aes = F, 
