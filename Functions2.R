@@ -1,7 +1,7 @@
-## Thi script loads all the required packages and several custom plotting functions
+## This script loads all the required packages and several custom plotting functions
 
 ## Define required packages
-req_packages = c("Biobase","cluster","cowplot","cummeRbund","data.table","DESeq","edgeR","ggplot2","ggrepel","ggthemes","GO.db","goseq","grid","gridExtra","plotly","qvalue","reshape", "Rmisc","splitstackshape","statmod","VennDiagram")
+req_packages = c("Biobase","cluster","cowplot","cummeRbund","data.table","DESeq","edgeR","ggplot2","ggrepel","ggthemes","GO.db","goseq","grid","gridExtra","plotly","qvalue","reshape", "Rmisc","splitstackshape","statmod","VennDiagram", "ggthemr")
 
 ## Load them
 lapply(req_packages, require, character.only = TRUE)
@@ -53,7 +53,7 @@ plotGenePM<-function(object, gene_id, logMode=FALSE){
   omega<-subset(paml.data, FBgn_ID == gene_id | gene_name == gene_id)$omega
   coords.tmp<-subset(gffRecord, FBgn_ID == gene_id | gene_name == gene_id)
   coords<-paste(coords.tmp$chromosome, ":", coords.tmp$min,"-",coords.tmp$max, sep = "")
-  p <- ggplot(subset(object, FBgn_ID == gene_id | gene_name == gene_id), aes(time, TPM, fill = condition)) + geom_bar(position=position_dodge(), stat="identity") + geom_errorbar(aes(ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.9)) + facet_grid(~tissue, scales="free_x", space = "free_x") + labs(title = paste(gene_id," (", geneName,"), ",coords,"\n","Ka/Ks = ", omega,"        mel. orth.: ",melOrth,"\n",swisprotName, sep = "")) + scale_fill_manual(values = c("#84a955", "#965da7", "#bc5d41"))
+  p <- ggplot(subset(object, FBgn_ID == gene_id | gene_name == gene_id), aes(time, TPM, fill = condition)) + geom_bar(position=position_dodge(), stat="identity") + geom_errorbar(aes(ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.9)) + facet_grid(~tissue, scales="free_x", space = "free_x") + labs(title = paste(gene_id," (", geneName,"), ",coords,"\n","Ka/Ks = ", omega,"        mel. orth.: ",melOrth,"\n",swisprotName, sep = "")) + scale_fill_manual(values = c("#77756b", "#b067a3", "#9c954d"))
   if (logMode)
   {
     p <- p + scale_y_log10()
@@ -76,7 +76,7 @@ plotGenePM_RT<-function(object, gene_id, logMode=FALSE){
   omega<-subset(paml.data, FBgn_ID == gene_id | gene_name == gene_id)$omega
   coords.tmp<-subset(gffRecord, FBgn_ID == gene_id | gene_name == gene_id)
   coords<-paste(coords.tmp$chromosome, ":", coords.tmp$min,"-",coords.tmp$max, sep = "")
-  p <- ggplot(subset(object, FBgn_ID == gene_id & tissue == "RT"| gene_name == gene_id & tissue == "RT"), aes(time, TPM, fill = condition)) + geom_bar(position=position_dodge(), stat="identity") + geom_errorbar(aes(ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.9)) + labs(title = paste(gene_id," (", geneName,"), ",coords,"\n","Ka/Ks = ", omega,"        mel. orth.: ",melOrth,"\n",swisprotName, sep = "")) + scale_fill_manual(values = c("#84a955", "#965da7", "#bc5d41"))
+  p <- ggplot(subset(object, FBgn_ID == gene_id & tissue == "RT"| gene_name == gene_id & tissue == "RT"), aes(time, TPM, fill = condition)) + geom_bar(position=position_dodge(), stat="identity") + geom_errorbar(aes(ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.9)) + labs(title = paste(gene_id," (", geneName,"), ",coords,"\n","Ka/Ks = ", omega,"        mel. orth.: ",melOrth,"\n",swisprotName, sep = "")) + scale_fill_manual(values = c("#77756b", "#b067a3", "#9c954d"))
   if (logMode)
   {
     p <- p + scale_y_log10()
