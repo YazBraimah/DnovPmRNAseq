@@ -347,33 +347,39 @@ lrt <- glmFit(DnovPM_DGElist_RT, condition.design)
 con.vs.het.RT.all.contrast <- glmLRT(lrt, contrast = condition.contrasts[,"con.vs.het"])
 con.vs.het.RT.all.tTags <- topTags(con.vs.het.RT.all.contrast, n = NULL)
 con.vs.het.RT.all.tTags.table <- con.vs.het.RT.all.tTags$table
-con.vs.het.RT.het.Up.list <- rownames(subset(con.vs.het.RT.all.tTags.table, logFC < -1 & FDR < 0.05))
-con.vs.het.RT.con.Up.list <- rownames(subset(con.vs.het.RT.all.tTags.table, logFC > 1 & FDR < 0.05))
+con.vs.het.RT.het.Up.list <- rownames(subset(con.vs.het.RT.all.tTags.table, logFC < -1 & FDR < 0.001))
+con.vs.het.RT.con.Up.list <- rownames(subset(con.vs.het.RT.all.tTags.table, logFC > 1 & FDR < 0.001))
 
 con.vs.vir.RT.all.contrast <- glmLRT(lrt, contrast = condition.contrasts[,"con.vs.vir"])
 con.vs.vir.RT.all.tTags <- topTags(con.vs.vir.RT.all.contrast, n = NULL)
 con.vs.vir.RT.all.tTags.table <- con.vs.vir.RT.all.tTags$table
-con.vs.vir.RT.con.Up.list <- rownames(subset(con.vs.vir.RT.all.tTags.table, logFC > 1 & FDR < 0.05))
-con.vs.vir.RT.con.Down.list <- rownames(subset(con.vs.vir.RT.all.tTags.table, logFC < -1 & FDR < 0.05))
+con.vs.vir.RT.con.Up.list <- rownames(subset(con.vs.vir.RT.all.tTags.table, logFC > 1 & FDR < 0.001))
+con.vs.vir.RT.con.Down.list <- rownames(subset(con.vs.vir.RT.all.tTags.table, logFC < -1 & FDR < 0.001))
 
 het.vs.vir.RT.all.contrast <- glmLRT(lrt, contrast = condition.contrasts[,"het.vs.vir"])
 het.vs.vir.RT.all.tTags <- topTags(het.vs.vir.RT.all.contrast, n = NULL)
 het.vs.vir.RT.all.tTags.table <- het.vs.vir.RT.all.tTags$table
-het.vs.vir.RT.het.Up.list <- rownames(subset(het.vs.vir.RT.all.tTags.table, logFC > 1 & FDR < 0.05))
-het.vs.vir.RT.het.Down.list <- rownames(subset(het.vs.vir.RT.all.tTags.table, logFC < -1 & FDR < 0.05))
+het.vs.vir.RT.het.Up.list <- rownames(subset(het.vs.vir.RT.all.tTags.table, logFC > 1 & FDR < 0.001))
+het.vs.vir.RT.het.Down.list <- rownames(subset(het.vs.vir.RT.all.tTags.table, logFC < -1 & FDR < 0.001))
 
 
 PM.vs.vir_Up_candidates <- list(conspecific = con.vs.vir.RT.con.Up.list, heterospecific = het.vs.vir.RT.het.Up.list)
 PM.vs.vir_Down_candidates <- list(conspecific = con.vs.vir.RT.con.Down.list, heterospecific = het.vs.vir.RT.het.Down.list)
 
 
-PM.vs.vir_Up_candidates_Vdiag<-venn.diagram(PM.vs.vir_Up_candidates, NULL, fill=c("#b067a3", "#9c954d"), alpha=c(0.75,0.75), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Upregulated")
-PM.vs.vir_Down_candidates_Vdiag<-venn.diagram(PM.vs.vir_Down_candidates, NULL, fill=c("#b067a3", "#9c954d"), alpha=c(0.75,0.75), cex = 1.5, cat.fontface= 4, cat.cex = 1.25, resolution = 1000, main = "Downregulated")
+PM.vs.vir_Up_candidates_Vdiag<-venn.diagram(PM.vs.vir_Up_candidates, NULL, fill=c("#b067a3", "#9c954d"), alpha=c(0.75,0.75), cex = 1.5, cat.fontface= 4, cat.cex = 0, resolution = 1000)
+PM.vs.vir_Down_candidates_Vdiag<-venn.diagram(PM.vs.vir_Down_candidates, NULL, fill=c("#b067a3", "#9c954d"), alpha=c(0.75,0.75), cex = 1.5, cat.fontface= 4, cat.cex = 0, resolution = 1000)
 grid.arrange(gTree(children=PM.vs.vir_Up_candidates_Vdiag))
 grid.arrange(gTree(children=PM.vs.vir_Down_candidates_Vdiag))
 
 pdf("con.vs.het.RT.het.Up.list.pdf", height = 4)
 lapply(con.vs.het.RT.het.Up.list, plotGenePM_RT, object = TPMse_DnovPM)
+dev.off()
+pdf("con.vs.vir.RT.con.Up.list.pdf", height = 4)
+lapply(con.vs.vir.RT.con.Up.list, plotGenePM_RT, object = TPMse_DnovPM)
+dev.off()
+pdf("het.vs.vir.RT.het.Up.list.pdf", height = 4)
+lapply(het.vs.vir.RT.het.Up.list, plotGenePM_RT, object = TPMse_DnovPM)
 dev.off()
 
 C2inv.qtl = data.frame(xmin=17747413.5, xmax=34500000, ymin=0, ymax = 1.5, chromosome = "Chr_2")
@@ -381,7 +387,7 @@ C5.qtl = data.frame(xmin=c(13800000, 16300000, 22800000), xmax=c(14750000, 21700
 
 Dnov.dvir1.06.RT.list.sigP = unique(subset(Annots, FBgn_ID %in% Dnov.dvir1.06.RT.list & SignalP == "YES"))$FBgn_ID
 
-ggplot(subset(paml.data, FBgn_ID %in% RT_het.12hrs.vs.virgin.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
+ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
     geom_point(size=2, alpha=0.75, aes(colour = "#7d49c3")) + 
     geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega, colour = "#4f922a"), size=2, alpha=0.75) + 
     geom_hline(yintercept = 0.15, linetype="dashed", colour = "red") + 
@@ -393,7 +399,7 @@ ggplot(subset(paml.data, FBgn_ID %in% RT_het.12hrs.vs.virgin.list & omega < 800 
     theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12), legend.text = element_text(size = 12, face="bold")) + 
     geom_rect(data=C2inv.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax, fill="red"), alpha=0.1, inherit.aes = FALSE) + 
     geom_rect(data=C5.qtl, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), fill="red", alpha=0.1, inherit.aes = FALSE) + 
-    scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")+ scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30"))
+    scale_fill_manual(name = '', values = "red",labels = "PMPZ\nQTL region")+ scale_x_continuous(breaks=c(5000000, 10000000, 15000000, 20000000, 25000000, 30000000), labels=expression("5", "10", "15", "20", "25", "30")) + theme_bw()
 
 
 
@@ -487,7 +493,7 @@ at6hrs=unique(subset(TPMse_DnovPM, FBgn_ID %in% unlist(RT_UP_6hrs_elements) & FB
 at12hrs=unique(subset(TPMse_DnovPM, FBgn_ID %in% unlist(RT_UP_12hrs_elements) & FBgn_ID %in% Dnov.dvir1.06.RT.list)$FBgn_ID)
 TheGenes = union(at3hrs, union(at6hrs, at12hrs))
 
-pdf(file = "~/Desktop/union.ofRT.pdf",width = 5.64, height = 2.75)
-lapply(TheGenes, plotGenePM_RT, object = TPMse_DnovPM)
+pdf(file = "RT-biased-sig.ofRT.pdf",width = 9, height = 3)
+lapply(TheGenes, plotBoth)
 dev.off()
-lapply(TheGenes, plotGeneG, object = TPMse)
+

@@ -1,3 +1,16 @@
+gene_lengths = read.table("~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/GO.analysis/FBgn_lengths.txt", header=T, row.names=1)
+gene_lengths = as.matrix(gene_lengths[,1,drop=F])
+GO_info = read.table("~/Dropbox/RNAseq/Male_RNAseq/VirilisGroupMaleRNAseq.Rproject/GO.analysis/Trinotate_report_dvir1.06_gene_ontology.txt", header=F, row.names=1,stringsAsFactors=F)
+GO_info_listed = apply(GO_info, 1, function(x) unlist(strsplit(x,',')))
+names(GO_info_listed) = rownames(GO_info)
+features_with_GO = rownames(GO_info)
+lengths_features_with_GO = gene_lengths[features_with_GO,]
+get_GO_term_descr =  function(x) {
+    d = 'none';
+    go_info = GOTERM[[x]];
+    if (length(go_info) >0) { d = paste(Ontology(go_info), Term(go_info), sep=' ');}
+    return(d);
+}
 
 # create gene lists and factor labeling
 RT_factors = as.data.frame(Dnov.dvir1.06.RT.list)
@@ -97,17 +110,19 @@ ggplot(subset(GO_enrichment_data, over_represented_FDR < 0.05 & factor == "RT-bi
        aes(category, -log10(over_represented_pvalue), size = numDEInCat, colour = ontology)) + 
     geom_point()  + 
     xlab(NULL) + 
-    geom_text_repel(data = subset(GO_enrichment_data, factor == "RT-biased" & over_represented_FDR < 0.05), 
+    geom_text_repel(data = subset(GO_enrichment_data, factor == "RT-biased" & over_represented_FDR < 0.05 & numDEInCat > 20), 
                     aes(category, -log10(over_represented_pvalue),label=term), 
                     force = 8, 
                     inherit.aes = F, 
                     box.padding = unit(0.35, "lines"), 
                     point.padding = unit(0.5, "lines"), 
                     fontface = "bold", 
-                    size = 3) + 
+                    size = 4) + 
     theme(axis.text.x = element_text(angle = 45, face = "bold", vjust = 1, hjust = 1)) + 
     scale_size(range = c(0,12)) + 
-    scale_colour_manual(values=c("#c27d92", "#a8a34b", "#8e61bf")) + 
+    scale_colour_manual(values=c("#e00068",
+                                 "#01777b",
+                                 "#9d31e4")) + 
     scale_y_continuous(limits=c(3, 10))
 
 
