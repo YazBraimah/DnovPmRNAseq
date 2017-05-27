@@ -5,6 +5,20 @@
 #|____/|_| |_|\___/ \_/ |_|   |_| |_| |_|_| \_\_| \_/_/   \_\___/\___|\__, |
 #                                                                        |_|
 
+#Load packages:
+req_packages = c("Biobase", "cluster", "cowplot", "cummeRbund", 
+                 "data.table", "DESeq", "edgeR", "ggplot2", "ggrepel", 
+                 "ggthemes", "GO.db", "goseq", "grid", "gridExtra", 
+                 "plotly", "qvalue", "reshape", "Rmisc", "splitstackshape", 
+                 "statmod", "VennDiagram", "ggthemr")
+
+lapply(req_packages, require, character.only = TRUE)
+
+# The Cowplot package changes the default themes of ggplot2. Set the default theme like so:
+theme_set(theme_gray())
+
+## Load functions:
+source("Functions2.R")
 ############# dvir1.06-based analysis
 
 # Read in expression data
@@ -129,8 +143,8 @@ TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "c
 TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
 
 ## plot a gene's expression like this:
-plotGenePM(TPMse_DnovPM, "GJ10165")
-
+plotGenePM(TPMse_DnovPM, "snRNA:U6:3")
+plotGeneG(TPMse, "snRNA:U6:3")
 ## Generate tissue specificity matrix:
 Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
 rownames(Dnov_virgin_tissue_MeanTPMmatrix) <- Dnov_virgin_tissue_MeanTPMmatrix[,1]
