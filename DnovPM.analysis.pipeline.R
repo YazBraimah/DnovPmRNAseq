@@ -5,7 +5,7 @@
 #|____/|_| |_|\___/ \_/ |_|   |_| |_| |_|_| \_\_| \_/_/   \_\___/\___|\__, |
 #                                                                        |_|
 
-#Load packages:
+## Load packages:
 req_packages = c("Biobase", "cluster", "cowplot", "cummeRbund", 
                  "data.table", "DESeq", "edgeR", "ggplot2", "ggrepel", 
                  "ggthemes", "GO.db", "goseq", "grid", "gridExtra", 
@@ -14,14 +14,34 @@ req_packages = c("Biobase", "cluster", "cowplot", "cummeRbund",
 
 lapply(req_packages, require, character.only = TRUE)
 
-# The Cowplot package changes the default themes of ggplot2. Set the default theme like so:
+## The Cowplot package changes the default themes of ggplot2. Set the default theme like so:
 theme_set(theme_gray())
 
 ## Load functions:
 source("Functions2.R")
-############# dvir1.06-based analysis
 
-# Read in expression data
+## Load annotations:
+grpTrinotate = read.csv("Annotations/Trinotate_report_dvir1.06_subset.txt", header = T, sep = "\t", na.strings = ".", stringsAsFactors=FALSE)
+GO_info = read.table("Annotations/Trinotate_report_dvir1.06_gene_ontology.txt", header=F, row.names=1,stringsAsFactors=F)
+
+gffRecord = read.table("Annotations/FBgn_ID_name_coordinates.txt", header = T)
+
+melOrths = read.table(file = "Annotations/mel_orths.txt", header = T)
+melOrthsAll = aggregate(mel_GeneSymbol~FBgn_ID, data = melOrths, toString)
+
+Annots = merge(merge(melOrthsAll, grpTrinotate, all=TRUE), gffRecord, all=TRUE)
+
+## Load PAML data
+
+tmp.FB.names = unique(subset(Annots, select=c("FBgn_ID", "FBtr_ID")))
+paml.data = read.csv(file = "Annotations/PAML.branchSite.ALL.results.txt", header = T, sep = "\t")
+paml.data = merge(tmp.FB.names, paml.data, all=T)
+paml.data = merge(gffRecord, paml.data, all=T)
+KaKs.data = read.csv(file = "Annotations/KaKs.ALL.results.txt", header = T, sep = "\t", check.names = F)
+KaKs.data = merge(tmp.FB.names, KaKs.data, all=T)
+KaKs.data = merge(gffRecord, KaKs.data, all=T)
+
+## Read in expression data
 DnovPM.dvir1.06.CountsMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.counts.matrix", header=T, row.names=1, com='', check.names=F)
 DnovPM.dvir1.06.TpmMatrix.cbmt = read.table("ExpressionData/genes_DnovPM_dvi1.06.TPM.not_cross_norm.counts_by_min_TPM", header = T)
 DnovPM.dvir1.06.TmmMatrix = read.table("ExpressionData/genes_DnovPM_dvi1.06.TMM.EXPR.matrix", header=T, row.names=1, com='', check.names=F)
@@ -69,8 +89,41 @@ ggplot(DnovPM.dvir1.06.TpmMatrix.cbmt, aes(neg_min_tpm,num_features)) +
     geom_hline(yintercept = 9185, colour = "green") + ggtitle("expressed genes", subtitle = "something")
 
 
+## Using the minimum CPM method to filter-out low expression genes
+all.CPM <- cpm(DnovPM.dvir1.06.CountsMatrix)
+thresh <- all.CPM > 1
+table(rowSums(thresh))
+keep <- rowSums(thresh) >= 2
+counts.keep <- DnovPM.dvir1.06.CountsMatrix[keep,]
+dim(counts.keep)
+
+DnovPM_CountsMatrix_RT = subset(DnovPM.dvir1.06.CountsMatrix, select=grepl("RT", colnames(DnovPM.dvir1.06.CountsMatrix)))
+head(DnovPM_CountsMatrix_RT)
+RT.CPM <- cpm(DnovPM_CountsMatrix_RT)
+thresh <- RT.CPM > 0.5
+table(rowSums(thresh))
+keep <- rowSums(thresh) >= 3
+RT.counts.keep <- DnovPM_CountsMatrix_RT[keep,]
+dim(RT.counts.keep)
+
+RT.group <- factor(c(1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7))
+RT.design <- model.matrix(~0+RT.group)
+colnames(RT.design)<-c("C12_RT", "C3_RT", "C6_RT", "H12_RT", "H3_RT", "H6_RT", "V_RT")
+DnovPM_DGElist_RT<-DGEList(counts = RT.counts.keep, group = RT.group)
+DnovPM_DGElist_RT<-calcNormFactors(DnovPM_DGElist_RT)
+DnovPM_DGElist_RT<-estimateDisp(DnovPM_DGElist_RT, RT.design, robust = T)
+DnovPM_RT_fit <- glmFit(DnovPM_DGElist_RT, RT.design)
+
+plotBCV(DnovPM_DGElist_RT)
+g <- gof(DnovPM_RT_fit)
+z <- zscoreGamma(g$gof.statistics,shape=g$df/2,scale=2)
+qqnorm(z); qqline(z, col = 4,lwd=4,lty=4)
+
+head(g$outlier)
+
+
 ## calculate dispersion
-d <- DGEList(counts = DnovPM.dvir1.06.CountsMatrix, group = DnovPM.Samples_data$V1)
+d <- DGEList(counts = counts.keep, group = DnovPM.Samples_data$V1)
 d <- calcNormFactors(d)
 d <- estimateCommonDisp(d)
 d <- estimateTagwiseDisp(d)
