@@ -1,3 +1,4 @@
+### R version
 
 req_packages = c("Biobase", "cluster", "cowplot", "cummeRbund", 
                  "data.table", "DESeq", "edgeR", "ggplot2", 
@@ -315,122 +316,37 @@ heatmap3(x = tissueBiased.meanTPM.v, balanceColor = T, ColSideLabs = "something"
 
 
 ## Calculate tissue specificity for all genes:
-virginSpecificity = calcSpecificity(tissueBiased.meanTPM.v)
+virginSpecificity = as.data.frame(calcSpecificity(tissueBiased.meanTPM.v))
 head(virginSpecificity)
-##############################  GAP HERE ##############################
 
-DnovPM_max_gene_expr_per_row = apply(DnovPM.dvir1.06.CountsMatrix, 1, max)
-DnovPM.dvir1.06.CountsMatrix.min400count = DnovPM.dvir1.06.CountsMatrix[DnovPM_max_gene_expr_per_row >= 400,,drop=F ]
+plot(x=log10(tissueBiased.meanTPM.v$V_RT), y=virginSpecificity$V_RT)
 
-##########################################################################################
-################# Remove "bad" replicates  for DE analysis ###############################
-### Based on the QC analysis above, some replicates show inconsistencies that are likely due to cross tissue contamination
-### during dissections. The DE analysis will exclude these replicates
-
-## Define good replicates (propper replicate grouping and correlation)
-DnovPM.GoodReps = as.character(subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")$V2)
-DnovPM.GoodSamples = subset(DnovPM.Samples_data, V2 != "H3_RT_1" & V2 != "H6_RT_1" & V2 != "C6_RT_1")
-
-## Create counts matrix with good replicates only
-DnovPM.dvir1.06.CountsMatrix.BRR=subset(DnovPM.dvir1.06.CountsMatrix, select=DnovPM.GoodReps)
-
-## Create normalized TPM matrix with good replicates only
-DnovPM.dvir1.06.TmmMatrix.BRR=subset(DnovPM.dvir1.06.TmmMatrix, select=DnovPM.GoodReps)
-
-## Rename columns to keep replicate order
-# count matrices
-colnames(DnovPM.dvir1.06.CountsMatrix.BRR) = DnovPM.GoodReps
-
-# TPM matrices
-colnames(DnovPM.dvir1.06.TmmMatrix.BRR) = colnames(DnovPM.dvir1.06.CountsMatrix.BRR)
+##
+tissueBiased.meanTPM.v2 = tissueBiased.meanTPM.v
+tissueBiased.meanTPM.v2$FBgn_ID = row.names(tissueBiased.meanTPM.v)
+rownames(tissueBiased.meanTPM.v2) = NULL
 
 
-#########################################################################################
-### Summary TPM table and matrix for gene level plots (includes good replicates only) ######### 
+virgin.factor.labeling.v = virgin.factor.labeling
+virgin.factor.labeling.v$FBgn_ID = rownames(virgin.factor.labeling)
 
-DnovPM.TPM.tmp<-DnovPM.dvir1.06.TmmMatrix.BRR
-colnames(DnovPM.TPM.tmp) <- DnovPM.GoodSamples$V1
-m.DnovPM.TPM.tmp <- as.data.frame(melt(as.matrix(DnovPM.TPM.tmp)))
-m.DnovPM.TPM.tmp <- within(m.DnovPM.TPM.tmp, X2<-data.frame(do.call('rbind', strsplit(as.character(X2),'_',fixed=TRUE))))
-m.DnovPM.TPM.tmp<-data.frame(m.DnovPM.TPM.tmp$X1, m.DnovPM.TPM.tmp$X2$X1, m.DnovPM.TPM.tmp$X2$X2, m.DnovPM.TPM.tmp$value)
-colnames(m.DnovPM.TPM.tmp) <- c("FBgn_ID", "sample", "tissue", "TPM")
-m.DnovPM.TPM.tmp$condition <- ifelse(grepl("C", m.DnovPM.TPM.tmp$sample, ignore.case = F), "conspecific", ifelse(grepl("H", m.DnovPM.TPM.tmp$sample, ignore.case = F), "heterospecific", "virgin"))
-m.DnovPM.TPM.tmp$time <- ifelse(grepl("3", m.DnovPM.TPM.tmp$sample), "3hpm", ifelse(grepl("6", m.DnovPM.TPM.tmp$sample), "6hpm", ifelse(grepl("12", m.DnovPM.TPM.tmp$sample), "12hpm","virgin")))
-m.DnovPM.TPM.tmp.c = summarySE(m.DnovPM.TPM.tmp, measurevar = "TPM", groupvars = c("FBgn_ID", "sample", "tissue", "condition", "time"))
-fbgn_to_geneName<-subset(gffRecord, select=c(FBgn_ID, gene_name))
-TPMse_DnovPM <- merge(fbgn_to_geneName, m.DnovPM.TPM.tmp.c, all=TRUE)
-DnovPM_MeanTPMmatrix<-cast(m.DnovPM.TPM.tmp.c, FBgn_ID~sample+tissue, value ="TPM")
-TPMse_DnovPM$condition = factor (TPMse_DnovPM$condition, levels = c("virgin", "conspecific", "heterospecific"))
-TPMse_DnovPM$time = factor (TPMse_DnovPM$time, levels = c("virgin", "3hpm", "6hpm", "12hpm"))
+tmpDF1 = merge(tissueBiased.meanTPM.v2, virgin.factor.labeling.v, all=TRUE)
+tmpDF2 = subset(paml.data, FBgn_ID %in% tmpDF1$FBgn_ID & omega < 800 & grepl("Chr", chromosome))
+tissBiased.paml.data  = merge (tmpDF1, tmpDF2)
 
-## plot a gene's expression like this:
-options(repr.plot.width = 7, repr.plot.height = 3)
-
-plotGenePM(TPMse_DnovPM, "GJ22636")
-
-subset(paml.data, gene_name == "GJ19434")
-
-### this is incomplete
-Dnov_virgin_tissue_MeanTPMmatrix <- subset(DnovPM_MeanTPMmatrix, select=c(FBgn_ID, V_CR, V_H, V_OV, V_RT))
-rownames(Dnov_virgin_tissue_MeanTPMmatrix) <- Dnov_virgin_tissue_MeanTPMmatrix[,1]
-Dnov_virgin_tissue_MeanTPMmatrix[,1] <- NULL
-
-virgin_RT_contrasts<- makeContrasts(V_RT.vs.V_CR=V_RT-V_CR, 
-                                        V_RT.vs.V_H=V_RT-V_H,
-                                        V_RT.vs.V_OV=V_RT-V_OV,
-                                        levels=DnovPM.design)
-
-virgin_OV_contrasts<- makeContrasts(V_OV.vs.V_CR=V_OV-V_CR, 
-                                    V_OV.vs.V_H=V_OV-V_H,
-                                    V_OV.vs.V_RT=V_OV-V_RT,
-                                    levels=DnovPM.design)
-
-virgin_H_contrasts<- makeContrasts(V_H.vs.V_CR=V_H-V_CR, 
-                                    V_H.vs.V_OV=V_H-V_OV,
-                                    V_H.vs.V_RT=V_H-V_RT,
-                                    levels=DnovPM.design)
-
-## RT-biased genes
-lrt.RT.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_RT_contrasts)
-lrt.RT.v.rest.tTags <- topTags(lrt.RT.v.rest, n = NULL)
-lrt.RT.v.rest.tTags.table <- lrt.RT.v.rest.tTags$table
-Dnov.dvir1.06.RT.list<-rownames(subset(lrt.RT.v.rest.tTags.table, logFC.V_RT.vs.V_CR > 2 & logFC.V_RT.vs.V_H > 2 & logFC.V_RT.vs.V_OV > 2 & FDR<0.001))
-
-## OV-biased genes
-lrt.OV.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_OV_contrasts)
-lrt.OV.v.rest.tTags <- topTags(lrt.OV.v.rest, n = NULL)
-lrt.OV.v.rest.tTags.table <- lrt.OV.v.rest.tTags$table
-Dnov.dvir1.06.OV.list<-rownames(subset(lrt.OV.v.rest.tTags.table, logFC.V_OV.vs.V_CR > 2 & logFC.V_OV.vs.V_H > 2 & logFC.V_OV.vs.V_RT > 2 & FDR<0.001))
-
-## H-biased genes
-lrt.H.v.rest <- glmLRT(DnovPM_fit, contrast = virgin_H_contrasts)
-lrt.H.v.rest.tTags <- topTags(lrt.H.v.rest, n = NULL)
-lrt.H.v.rest.tTags.table <- lrt.H.v.rest.tTags$table
-Dnov.dvir1.06.H.list<-rownames(subset(lrt.H.v.rest.tTags.table, logFC.V_H.vs.V_CR > 2 & logFC.V_H.vs.V_OV > 2 & logFC.V_H.vs.V_RT > 2 & FDR<0.001))
-
-Dnov.dvir1.06.RT.matrix <- subset(Dnov_virgin_tissue_MeanTPMmatrix, rownames(Dnov_virgin_tissue_MeanTPMmatrix) %in% Dnov.dvir1.06.RT.list)
-
-length(Dnov.dvir1.06.RT.list) 
-
-options(repr.plot.width = 4, repr.plot.height = 4)
-plotHeatmap(Dnov.dvir1.06.RT.matrix, clustering = "both", labRow = F)
-
-options(repr.plot.width = 9, repr.plot.height = 2)
-ggplot(subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega < 800 & grepl("Chr", chromosome)), aes(max, omega)) + 
-    geom_point(size=2, alpha=0.5, colour = "#7d49c3") + 
-  #  geom_point(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` ), aes(max, omega), inherit.aes = F, size=2, alpha=0.5, colour = "#4f922a") + 
+ggplot(tissBiased.paml.data, aes(max, omega, colour = tissue_bias)) + 
+    geom_point(size=2, alpha=0.5) + 
     geom_hline(yintercept = 0.15, linetype="dashed", colour = "yellow") + 
     geom_hline(yintercept = 1, linetype="dashed", colour = "gray")  + 
-    facet_grid(~chromosome, scales = "free_x") + 
-#    scale_colour_manual(name = "", values =c("#7aa457"="#7aa457","#9e6ebd"="#9e6ebd"), labels = c("SFPs","EB biased")) + 
+    facet_grid(tissue_bias~chromosome, scales = "free") +
     scale_x_continuous(breaks=seq(5000000,30000000,5000000), labels=expression("5", "10", "15", "20", "25", "30")) + 
     xlab ("Chromosome coordinates (Mb)") + 
     labs(y=expression(K[a]/K[s])) + 
-#    geom_text_repel(data=subset(paml.data, FBgn_ID %in% Dnov.dvir1.06.RT.list & omega > 0.95 & omega < 800), aes(label = gene_name), size =3, force = 30, colour = "#7d49c3") +
-  #  geom_text_repel(data=subset(paml.data, gene_name == "GJ21515"), aes(label = gene_name), size =3, force = 30, colour = "#4f922a") +
-  #  geom_text_repel(data=subset(paml.data, FBgn_ID %in% SFP_elements$`D.ame,D.lum,D.nov,D.vir` & omega > 0.8), aes(label = gene_name), size =3, force = 4, colour = "#4f922a") +
     theme(axis.title.x = element_text(face = "bold", size = 10, vjust=0.1), axis.text.x=element_text(face = "bold", size = 12),axis.text.y = element_text(face = "bold", size = 12), axis.title.y = element_text(face = "bold.italic", size = 12, vjust=0.1), strip.text=element_text(face="bold", size = 12))
 
+
+
+### GO analysis
 
 
 gene_lengths = read.table("GO.analysis/FBgn_lengths.txt", header=T, row.names=1)
