@@ -790,6 +790,28 @@ MA_BPlot <- function(data, col1, col2) {
     return(plots)
 }
 #
+
+## cluster object (can plot with cummerbund's csClusterPlot)
+csCluster_c<-function(object, k, logMode=T, method='none', pseudocount=1,...){
+    require(cluster)
+    m<-as.data.frame(object)
+    m<-m[rowSums(m)>0,]
+    if(logMode){
+        m<-log10(m+pseudocount)
+    }
+    
+    if(!is.function(method)){
+        method = function(mat){JSdist(makeprobs(t(m)))}	
+    }		
+    n<-method(m)
+    clusters<-pam(n,k, ...)
+    #clsuters<-pamk(n,krange=2:20)
+    class(clusters)<-"list"
+    clusters$fpkm<-m
+    clusters
+}
+##
+
 plotGenePM<-function(object, gene_id, logMode=FALSE){
   if (grepl("FBgn", gene_id)){
     geneName<-subset(Annots, FBgn_ID == gene_id)$gene_name
