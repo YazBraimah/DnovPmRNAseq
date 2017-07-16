@@ -982,6 +982,23 @@ geneLookupG <- function(gene, complete=F) {
     return (result) 
 }
 
+## estimate number of cluster for K-means
+findK<-function(object, k.range=c(2:20), logMode=T, pseudocount=1,...){
+    require(cluster)
+    m<-as.data.frame(object)
+    m<-m[rowSums(m)>0,]
+    if(logMode){
+        m<-log10(m+pseudocount)
+    }
+    n<-JSdist(makeprobs(t(m)))
+    myWidths<-c()
+    for (k in k.range){
+        print(k)
+        myWidths<-c(myWidths,pam(n,k,...)$silinfo$avg.width)
+    }
+    plot(k.range,myWidths)
+}
+
 ## Modifications of functions to compare groups of lists 
 ## (from http://stackoverflow.com/questions/23559371/how-to-get-the-list-of-items-in-venn-diagram-in-r)
 Intersect <- function (x) {  
