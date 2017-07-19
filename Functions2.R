@@ -857,6 +857,35 @@ plotGenePM_RT<-function(object, gene_id, logMode=FALSE){
   }
   return(p)
 }
+#
+plotGeneMale<-function(object, gene_id, logMode=FALSE){
+    if (grepl("FBgn", gene_id)){
+        geneName<-subset(Annots, FBgn_ID == gene_id)$gene_name
+    } else {geneName<-subset(Annots, gene_name == gene_id)$FBgn_ID}
+    swisprotName<-subset(Annots, FBgn_ID == gene_id | gene_name == gene_id)$SwissProt_BlastX_Description
+    melOrth<-subset(Annots, FBgn_ID == gene_id | gene_name == gene_id)$mel_GeneSymbol
+    coords.tmp<-subset(gffRecord, FBgn_ID == gene_id | gene_name == gene_id)
+    coords<-paste(coords.tmp$chromosome, ":", coords.tmp$min,"-",coords.tmp$max, sep = "")
+    omega<-subset(paml.data, FBgn_ID == gene_id | gene_name == gene_id)$omega
+    p <- ggplot(subset(object, FBgn_ID == gene_id | gene_name == gene_id), aes(x=tissue, y=TPM, fill=species)) + geom_bar(position=position_dodge(), stat="identity") + geom_errorbar(aes(ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.9)) + facet_grid(~tissue, scales="free_x", space = "free_x") + labs(title = paste(gene_id," (", geneName,"), ",coords,"\n","Ka/Ks = ", omega,"        mel. orth.: ",melOrth,"\n",swisprotName, sep = "")) + theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+    if (logMode)
+    {
+        p <- p + scale_y_log10()
+    }
+    if (logMode)
+    {
+        p <- p + ylab("log10 TPM")
+    } else {
+        p <- p + ylab("TPM")
+    }
+    return(p)
+}
+#
+plotGeneBoth <-function(object1, object2, gene_id){
+    male = plotGeneMale(object1, gene_id)
+    female = plotGenePM(object2, gene_id)
+    plot_grid(female, male)
+}
 # Plot mel gene
 plotGeneMel<-function(object, gene_id, logMode=FALSE){
     if (grepl("FBgn", gene_id)){
@@ -1015,7 +1044,7 @@ findK<-function(object, k.range=c(2:20), logMode=T, pseudocount=1,...){
     n<-JSdist(makeprobs(t(m)))
     myWidths<-c()
     for (k in k.range){
-        print(k)
+        #print(k)
         myWidths<-c(myWidths,pam(n,k,...)$silinfo$avg.width)
     }
     plot(k.range,myWidths)
