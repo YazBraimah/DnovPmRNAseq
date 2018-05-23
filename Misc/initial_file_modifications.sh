@@ -58,3 +58,44 @@ echo "transcript_id\tlength" > header
 get_transcript_lengths.pl compreh_init_build.fasta | cat header - > pasa_transcript_lengths.txt
 
 
+###-------------------------------------------------------------###
+
+## Generate the samples.txt file
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Genome/eXpress
+
+head -1 genome.gene.counts.matrix | tr '\t' '\n' | sed '/^$/d' > reps
+
+head -1 genome.gene.counts.matrix | tr '\t' '\n' | sed '/^$/d' | sed 's/_.$//g' | paste -d"\t" - reps  > ../../Misc/samples.txt
+
+rm reps
+
+###-------------------------------------------------------------###
+
+## Add a header column to the pasa vs. genome blast result
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Misc
+
+echo "qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" | tr ' ' '\t' | cat - BLASTn.pasa_vs_genome.outfmt6 > BLASTn.pasa_vs_genome.outfmt6.txt
+
+
+###-------------------------------------------------------------###
+
+## create counts by minimum TPM tables
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Genome/eXpress
+~/Programs/trinityrnaseq-2.1.1/util/misc/count_matrix_features_given_MIN_TPM_threshold.pl genome.gene.TPM.not_cross_norm > genome.gene.TPM.not_cross_norm.counts_by_min_TPM
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Genome/annotated_eXpress
+~/Programs/trinityrnaseq-2.1.1/util/misc/count_matrix_features_given_MIN_TPM_threshold.pl annotated.gene.TPM.not_cross_norm > annotated.gene.TPM.not_cross_norm.counts_by_min_TPM
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Trinity/pasa/eXpress
+~/Programs/trinityrnaseq-2.1.1/util/misc/count_matrix_features_given_MIN_TPM_threshold.pl pasa.gene.TPM.not_cross_norm > pasa.gene.TPM.not_cross_norm.counts_by_min_TPM
+
+###-------------------------------------------------------------###
+
+## extract one-to-one blast hits for pasa vs. stringtie transcripts table
+
+cd ~/Dropbox/RNAseq/Female_RNAseq/DnovPmRNAseq/Misc
+
+awk '{print $1"\t"$2}' BLASTn.pasa_vs_genome.outfmt6 | sort -u > BLASTn.pasa_vs_genome.outfmt6_one_to_one.txt
