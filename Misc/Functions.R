@@ -265,6 +265,62 @@ OV.geneBoxPlot <- function(object, gene) {
 ##----------------------------------------##
 ##----------------------------------------##
 
+
+OV.genePointPlot <- function (object, gene, show_reps = F, nonRuv = F) 
+{
+  swisprotName <- subset(annot.sum, FBgn_ID == gene)$SwissProt_BlastX_Description
+  melOrth <- subset(melOrthsAll, FBgn_ID == gene)$mel_GeneSymbol
+  geneName <- subset(annot.sum, FBgn_ID == gene)$gene_name
+  tmpDF = subset(object, FBgn_ID == gene)
+  if (nonRuv) {
+    tmpDF = subset(tmpDF, Tissue == "ovaries")
+  }
+  tmpDF.se = summarySE(tmpDF, measurevar = "TPM", groupvars = c("FBgn_ID", "sample", "Status", "Time", "gene_name"))
+  tmpDF.se$Time <- factor(tmpDF.se$Time, levels = c("virgin", "6hpm"))
+  tmpDF.se$Status <- factor(tmpDF.se$Status, levels = c("virgin", "conspecific", "heterospecific"))
+  p <- ggplot() + 
+    geom_point(data = tmpDF.se, mapping = aes(Time, TPM, colour = Status), stat = "identity", position = position_dodge(0.6),  size = 2) + 
+    geom_errorbar(data = tmpDF.se, aes(Time, ymin = TPM - se, ymax = TPM + se, colour = Status), width = 0.2, position = position_dodge(0.6), size = 0.5) + 
+    labs(title = paste(gene, " (", geneName, ")", sep = ""), subtitle = paste(melOrth, ": ", swisprotName, sep = "")) + theme_bw() + theme(axis.text.x = element_text(angle = 45,  hjust = 1, size = 13), axis.text.y = element_text(size = 12),axis.title.x = element_blank()) + scale_colour_manual(values = c("#3f5a2a", 
+                                                                                                                                                                                                                                                                                              "#ffb200", "#00b5d4"))
+  if (show_reps) {
+    p <- p + geom_point(data = tmpDF, mapping = aes(y = TPM, 
+                                                    x = Time, colour = Status), position = position_jitter(w = 0.1, 
+                                                                                                           h = 0), size = 0.8)
+  }
+  return(p)
+}
+
+##----------------------------------------##
+##----------------------------------------##
+
+H.genePointPlot <- function (object, gene, show_reps = F, nonRuv = F) 
+{
+  swisprotName <- subset(annot.sum, FBgn_ID == gene)$SwissProt_BlastX_Description
+  melOrth <- subset(melOrthsAll, FBgn_ID == gene)$mel_GeneSymbol
+  geneName <- subset(annot.sum, FBgn_ID == gene)$gene_name
+  tmpDF = subset(object, FBgn_ID == gene)
+  if (nonRuv) {
+    tmpDF = subset(tmpDF, Tissue == "head")
+  }
+  tmpDF.se = summarySE(tmpDF, measurevar = "TPM", groupvars = c("FBgn_ID", "sample", "Status", "Time", "gene_name"))
+  tmpDF.se$Time <- factor(tmpDF.se$Time, levels = c("virgin", "6hpm"))
+  tmpDF.se$Status <- factor(tmpDF.se$Status, levels = c("virgin", "conspecific", "heterospecific"))
+  p <- ggplot() + 
+    geom_point(data = tmpDF.se, mapping = aes(Time, TPM, colour = Status), stat = "identity", position = position_dodge(0.6),  size = 2) + 
+    geom_errorbar(data = tmpDF.se, aes(Time, ymin = TPM - se, ymax = TPM + se, colour = Status), width = 0.2, position = position_dodge(0.6), size = 0.5) + 
+    labs(title = paste(gene, " (", geneName, ")", sep = ""), subtitle = paste(melOrth, ": ", swisprotName, sep = "")) + theme_bw() + theme(axis.text.x = element_text(angle = 45,  hjust = 1, size = 13), axis.text.y = element_text(size = 12),axis.title.x = element_blank()) + scale_colour_manual(values = c("#3f5a2a", 
+                                                                                                                                                                                                                                                                                              "#ffb200", "#00b5d4"))
+  if (show_reps) {
+    p <- p + geom_point(data = tmpDF, mapping = aes(y = TPM, 
+                                                    x = Time, colour = Status), position = position_jitter(w = 0.1, 
+                                                                                                           h = 0), size = 0.8)
+  }
+  return(p)
+}
+
+##----------------------------------------##
+##----------------------------------------##
 H.geneBoxPlot <- function(object, gene) {
     swisprotName <- subset(annot.sum, FBgn_ID == gene)$SwissProt_BlastX_Description
         melOrth <- subset(melOrthsAll, FBgn_ID == gene)$mel_GeneSymbol
@@ -1522,30 +1578,32 @@ geneBarPlot <- function (object, gene, show_reps = F)
 ##----------------------------------------##
 ##----------------------------------------##
 
-RT.geneBarPlot <- function (object, gene, show_reps = F) 
+RT.geneBarPlot <- (function (object, gene, show_reps = F) 
 {
     swisprotName <- subset(annot.sum, FBgn_ID == gene)$SwissProt_BlastX_Description
     melOrth <- subset(melOrthsAll, FBgn_ID == gene)$mel_GeneSymbol
     geneName <- subset(annot.sum, FBgn_ID == gene)$gene_name
-    
     tmpDF = subset(object, FBgn_ID == gene & Tissue == "repTract")
-    tmpDF.se = summarySE(tmpDF, measurevar = "TPM", groupvars = c("FBgn_ID", "gene_name", "sample", "Sex", "Tissue", "Status", "Time"))
-    
+    tmpDF.se = summarySE(tmpDF, measurevar = "TPM", groupvars = c("FBgn_ID", 
+        "gene_name", "sample", "Sex", "Tissue", "Status", "Time"))
     p <- ggplot(subset(object, FBgn_ID == gene & Tissue == "repTract"), 
-        aes(Time, TPM, fill = Status)) + 
-        geom_bar(data = tmpDF.se, mapping = aes(Time, fill = Status), stat = "identity", position = position_dodge(.6), size = 0.7, width = 0.5) +
-        geom_errorbar(data = tmpDF.se, aes(Time, ymin=TPM-se, ymax=TPM+se), width=.2, position=position_dodge(.6), size = 1) + 
-        labs(title = paste(melOrth, sep = ""), 
-            subtitle = paste(swisprotName, sep = "")) + 
-        theme(legend.position = "none", axis.text.x = element_text(angle = 45, 
-            hjust = 1, size = 12), axis.text.y = element_text(size = 12), 
-            axis.title.x = element_blank()) + scale_fill_manual(values = c("#3f5a2a", 
-        "#ffb200", "#00b5d4"))
-    if (show_reps){
-            p <- p + geom_point(data = tmpDF, mapping = aes(Time, TPM, colour = Status), position = position_jitterdodge(jitter.width = 0,dodge.width = 0.6), size = 0.8)
-            }
+        aes(Time, TPM, fill = Status)) + geom_bar(data = tmpDF.se, 
+        mapping = aes(Time, fill = Status), stat = "identity", 
+        position = position_dodge(0.6), size = 0.7, width = 0.5) + 
+        geom_errorbar(data = tmpDF.se, aes(Time, ymin = TPM - 
+            se, ymax = TPM + se), width = 0.2, position = position_dodge(0.6), 
+            size = 1) + labs(title = paste(melOrth, " (", geneName, ")", sep = ""), 
+        subtitle = paste(swisprotName, sep = "")) + theme(legend.position = "none", 
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 12), 
+        axis.text.y = element_text(size = 12), axis.title.x = element_blank()) + 
+        scale_fill_manual(values = c("gray", "#ffb200", "#00b5d4"))
+    if (show_reps) {
+        p <- p + geom_point(data = tmpDF, mapping = aes(Time, 
+            TPM, colour = Status), position = position_jitterdodge(jitter.width = 0, 
+            dodge.width = 0.6), size = 0.8)
+    }
     return(p)
-}
+})
 
 ##----------------------------------------##
 ##----------------------------------------##
@@ -1575,6 +1633,81 @@ RT.genePointPlot <- function (object, gene, show_reps = F, nonRuv = F)
         axis.title.x = element_blank()) + scale_colour_manual(values = c("#3f5a2a", "#ffb200", "#00b5d4"))
     if (show_reps) {
         p <- p + geom_point(data = tmpDF, mapping = aes(y = TPM, x = Time, colour = Status), position = position_jitter(w = 0.1, h = 0), size = 0.8)
+    }
+    return(p)
+}
+heatmap_mean_ra_output <- function (tpmMatrix, gene_list, title, x = 2, show_names = FALSE, 
+    row_annots, output = FALSE, outfile, width = 4, height = 7) 
+{
+    col_annot = unique(dplyr::select(sampleInfo, SampleName, 
+        Sex, Tissue, Time))
+    rownames(col_annot) = col_annot$SampleName
+    col_annot = subset(col_annot, select = c("Sex", "Tissue"))
+    data <- subset(tpmMatrix, rownames(tpmMatrix) %in% gene_list)
+    data = log2(data + 1)
+    data = as.data.frame(t(scale(t(data), scale = F)))
+    data[data < -x] = -x
+    data[data > x] = x
+    if (output) {
+        if (show_names) {
+        p <- pheatmap(mat = data, main = title, color = viridis(100), 
+            border_color = NA, show_colnames = TRUE, show_rownames = TRUE, 
+            annotation_col = col_annot, annotation_row = row_annots, 
+            drop_levels = TRUE, annotation_names_row = T, fontsize = 8, filename = outfile,
+            width = width, 
+            height = height)
+    }
+    else {
+        p <- pheatmap(mat = data, main = title, color = viridis(100), 
+            border_color = NA, show_colnames = TRUE, show_rownames = FALSE, 
+            annotation_col = col_annot, annotation_row = row_annots, 
+            drop_levels = TRUE, annotation_names_row = T, fontsize = 8, filename = outfile,
+            width = width, 
+            height = height)
+    }
+    } else {
+       if (show_names) {
+        p <- pheatmap(mat = data, main = title, color = viridis(100), 
+            border_color = NA, show_colnames = TRUE, show_rownames = TRUE, 
+            annotation_col = col_annot, annotation_row = row_annots, 
+            drop_levels = TRUE, annotation_names_row = T, fontsize = 8)
+    }
+    else {
+        p <- pheatmap(mat = data, main = title, color = viridis(100), 
+            border_color = NA, show_colnames = TRUE, show_rownames = FALSE, 
+            annotation_col = col_annot, annotation_row = row_annots, 
+            drop_levels = TRUE, annotation_names_row = T, fontsize = 8)
+    } 
+    }
+    
+    return(p)
+}
+
+
+tissue.pointPlot <- function (object, gene, show_reps = F, nonRuv = F) 
+{
+    swisprotName <- subset(annot.sum, FBgn_ID == gene)$SwissProt_BlastX_Description
+    melOrth <- subset(melOrthsAll, FBgn_ID == gene)$mel_GeneSymbol
+    geneName <- subset(annot.sum, FBgn_ID == gene)$gene_name
+    tmpDF = subset(object, FBgn_ID == gene & (Time == "virgin" | Time == "24hpm"))
+    tmpDF.se = summarySE(tmpDF, measurevar = "TPM", groupvars = c("FBgn_ID", 
+        "Tissue", "gene_name", "Sex"))
+#     tmpDF.se$Tissue <- factor(tmpDF.se$Time, levels = c("virgin", 
+#         "3hpm", "6hpm", "12hpm"))
+    tmpDF.se$Sex <- factor(tmpDF.se$Sex, levels = c("female", 
+        "male"))
+    p <- ggplot() + geom_point(data = tmpDF.se, mapping = aes(Tissue, 
+        TPM, colour = Sex), stat = "identity", position = position_dodge(0.6), 
+        size = 1) + geom_errorbar(data = tmpDF.se, aes(Tissue, 
+        ymin = TPM - se, ymax = TPM + se, colour = Sex), width = 0.2, 
+        position = position_dodge(0.6), size = 0.5) + facet_grid(.~Sex, scales = "free_x", space = "free_x") + labs(title = paste(gene, 
+        " (", geneName, ")", sep = ""), subtitle = paste(swisprotName, sep = "")) + theme_bw() + theme(axis.text.x = element_text(angle = 45, 
+        hjust = 1, size = 13), axis.text.y = element_text(size = 12), 
+        axis.title.x = element_blank(), legend.position = "none") + scale_colour_manual(values = c("#9260ea", "#a4d644"))
+    if (show_reps) {
+        p <- p + geom_point(data = tmpDF, mapping = aes(y = TPM, 
+            x = Tissue, colour = Sex), position = position_jitter(w = 0.1, 
+            h = 0), size = 0.8)
     }
     return(p)
 }
