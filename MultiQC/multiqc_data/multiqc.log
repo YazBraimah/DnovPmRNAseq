@@ -1,0 +1,78 @@
+[2018-05-24 16:50:25,950] multiqc                                            [DEBUG  ]  No MultiQC config found: /home/ya76/python/lib/python3.6/site-packages/multiqc_config.yaml
+[2018-05-24 16:50:25,950] multiqc                                            [DEBUG  ]  No MultiQC config found: /home/ya76/.multiqc_config.yaml
+[2018-05-24 16:50:25,951] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2018-05-24 16:50:25,951] multiqc                                            [DEBUG  ]  Command used: /home/ya76/python/bin/multiqc -f -o /fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC -l /fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/summary_files.txt
+[2018-05-24 16:50:31,158] multiqc                                            [DEBUG  ]  Could not connect to multiqc.info for version check: timed out
+[2018-05-24 16:50:31,158] multiqc                                            [INFO   ]  This is MultiQC v1.3
+[2018-05-24 16:50:31,159] multiqc                                            [DEBUG  ]  Command     : /home/ya76/python/bin/multiqc -f -o /fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC -l /fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/summary_files.txt
+[2018-05-24 16:50:31,159] multiqc                                            [DEBUG  ]  Working dir : /home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq
+[2018-05-24 16:50:31,159] multiqc                                            [INFO   ]  Template    : default
+[2018-05-24 16:50:31,192] multiqc                                            [DEBUG  ]  Analysing modules: afterqc, custom_content, conpair, peddy, methylQA, qualimap, preseq, quast, qorts, rna_seqc, rsem, rseqc, busco, goleft_indexcov, disambiguate, supernova, deeptools, homer, macs2, theta2, snpeff, gatk, htseq, bcftools, featureCounts, picard, prokka, samblaster, samtools, bamtools, jellyfish, vcftools, bbmap, bismark, hicexplorer, hicup, salmon, kallisto, slamdunk, star, hisat2, tophat, bowtie2, bowtie1, leehom, adapterRemoval, cutadapt, flexbar, trimmomatic, skewer, sortmerna, biobloomtools, fastq_screen, fastqc, clusterflow, bcl2fastq, interop
+[2018-05-24 16:50:31,192] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /tmp/1641951.1.regular.q/tmplcer94s0
+[2018-05-24 16:50:34,676] multiqc                                            [DEBUG  ]  No samples found: afterqc
+[2018-05-24 16:50:34,701] multiqc                                            [DEBUG  ]  No samples found: custom_content
+[2018-05-24 16:50:34,722] multiqc                                            [DEBUG  ]  No samples found: conpair
+[2018-05-24 16:50:34,739] multiqc                                            [DEBUG  ]  No samples found: peddy
+[2018-05-24 16:50:34,758] multiqc                                            [DEBUG  ]  No samples found: methylQA
+[2018-05-24 16:50:34,780] multiqc                                            [DEBUG  ]  No samples found: qualimap
+[2018-05-24 16:50:34,800] multiqc                                            [DEBUG  ]  No samples found: preseq
+[2018-05-24 16:50:34,834] multiqc                                            [DEBUG  ]  No samples found: quast
+[2018-05-24 16:50:34,851] multiqc                                            [DEBUG  ]  No samples found: qorts
+[2018-05-24 16:50:34,870] multiqc                                            [DEBUG  ]  No samples found: rna_seqc
+[2018-05-24 16:50:34,887] multiqc                                            [DEBUG  ]  No samples found: rsem
+[2018-05-24 16:50:34,963] multiqc                                            [DEBUG  ]  No samples found: rseqc
+[2018-05-24 16:50:34,986] multiqc                                            [DEBUG  ]  No samples found: busco
+[2018-05-24 16:50:35,004] multiqc                                            [DEBUG  ]  No samples found: goleft_indexcov
+[2018-05-24 16:50:35,025] multiqc                                            [DEBUG  ]  No samples found: disambiguate
+[2018-05-24 16:50:35,042] multiqc                                            [DEBUG  ]  No samples found: supernova
+[2018-05-24 16:50:35,086] multiqc                                            [DEBUG  ]  No samples found: deeptools
+[2018-05-24 16:50:35,120] multiqc                                            [DEBUG  ]  No samples found: homer
+[2018-05-24 16:50:35,137] multiqc                                            [DEBUG  ]  No samples found: macs2
+[2018-05-24 16:50:35,153] multiqc                                            [DEBUG  ]  No samples found: theta2
+[2018-05-24 16:50:35,174] multiqc                                            [DEBUG  ]  No samples found: snpeff
+[2018-05-24 16:50:35,204] multiqc                                            [DEBUG  ]  No samples found: gatk
+[2018-05-24 16:50:35,218] multiqc                                            [DEBUG  ]  No samples found: htseq
+[2018-05-24 16:50:35,248] multiqc                                            [DEBUG  ]  No samples found: bcftools
+[2018-05-24 16:50:35,262] multiqc                                            [DEBUG  ]  No samples found: featureCounts
+[2018-05-24 16:50:35,362] multiqc                                            [DEBUG  ]  No samples found: picard
+[2018-05-24 16:50:35,381] multiqc                                            [DEBUG  ]  No samples found: prokka
+[2018-05-24 16:50:35,403] multiqc                                            [DEBUG  ]  No samples found: samblaster
+[2018-05-24 16:50:35,449] multiqc                                            [DEBUG  ]  No samples found: samtools
+[2018-05-24 16:50:35,473] multiqc                                            [DEBUG  ]  No samples found: bamtools
+[2018-05-24 16:50:35,489] multiqc                                            [DEBUG  ]  No samples found: jellyfish
+[2018-05-24 16:50:35,538] multiqc                                            [DEBUG  ]  No samples found: vcftools
+[2018-05-24 16:50:35,631] multiqc                                            [DEBUG  ]  No samples found: bbmap
+[2018-05-24 16:50:35,650] multiqc                                            [DEBUG  ]  No samples found: bismark
+[2018-05-24 16:50:35,667] multiqc                                            [DEBUG  ]  No samples found: hicexplorer
+[2018-05-24 16:50:35,688] multiqc                                            [DEBUG  ]  No samples found: hicup
+[2018-05-24 16:50:35,704] multiqc                                            [DEBUG  ]  No samples found: salmon
+[2018-05-24 16:50:35,718] multiqc                                            [DEBUG  ]  No samples found: kallisto
+[2018-05-24 16:50:35,734] multiqc                                            [DEBUG  ]  No samples found: slamdunk
+[2018-05-24 16:50:35,749] multiqc                                            [DEBUG  ]  No samples found: star
+[2018-05-24 16:50:35,770] multiqc                                            [DEBUG  ]  No samples found: hisat2
+[2018-05-24 16:50:35,788] multiqc                                            [DEBUG  ]  No samples found: tophat
+[2018-05-24 16:50:35,868] multiqc.modules.bowtie2.bowtie2                    [INFO   ]  Found 138 reports
+[2018-05-24 16:50:41,014] multiqc                                            [DEBUG  ]  No samples found: bowtie1
+[2018-05-24 16:50:41,085] multiqc                                            [DEBUG  ]  No samples found: leehom
+[2018-05-24 16:50:41,106] multiqc                                            [DEBUG  ]  No samples found: adapterRemoval
+[2018-05-24 16:50:41,123] multiqc                                            [DEBUG  ]  No samples found: cutadapt
+[2018-05-24 16:50:41,141] multiqc                                            [DEBUG  ]  No samples found: flexbar
+[2018-05-24 16:50:41,164] multiqc                                            [DEBUG  ]  No samples found: trimmomatic
+[2018-05-24 16:50:41,185] multiqc                                            [DEBUG  ]  No samples found: skewer
+[2018-05-24 16:50:41,199] multiqc                                            [DEBUG  ]  No samples found: sortmerna
+[2018-05-24 16:50:41,222] multiqc                                            [DEBUG  ]  No samples found: biobloomtools
+[2018-05-24 16:50:41,235] multiqc                                            [DEBUG  ]  No samples found: fastq_screen
+[2018-05-24 16:50:43,140] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 49 reports
+[2018-05-24 16:50:44,059] multiqc                                            [DEBUG  ]  No samples found: clusterflow
+[2018-05-24 16:50:44,078] multiqc                                            [DEBUG  ]  No samples found: bcl2fastq
+[2018-05-24 16:50:44,098] multiqc                                            [DEBUG  ]  No samples found: interop
+[2018-05-24 16:50:44,233] multiqc                                            [INFO   ]  Compressing plot data
+[2018-05-24 16:50:45,670] multiqc                                            [INFO   ]  Report      : ../../../../fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_report.html
+[2018-05-24 16:50:45,670] multiqc                                            [INFO   ]  Data        : ../../../../fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data
+[2018-05-24 16:50:45,712] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/multiqc_bowtie2.txt' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:45,742] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/multiqc_sources.txt' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:45,745] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/multiqc_fastqc.txt' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:45,747] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/multiqc_general_stats.txt' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:45,749] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/mqc_bowtie2_se_plot_1.txt' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:45,751] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/1641951.1.regular.q/tmplcer94s0/multiqc_data/multiqc_data.json' to '/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data'
+[2018-05-24 16:50:46,424] multiqc                                            [INFO   ]  MultiQC complete

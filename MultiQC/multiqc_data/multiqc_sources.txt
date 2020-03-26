@@ -1,0 +1,188 @@
+Module	Section	Sample Name	Source
+Bowtie 2	all_sections	hisat2_Female_C12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C12_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_C12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C12_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_C12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C12_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_C3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C3_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_C3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C3_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_C3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C3_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_C6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_H_1.log
+Bowtie 2	all_sections	hisat2_Female_C6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_H_2.log
+Bowtie 2	all_sections	hisat2_Female_C6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_OV_1.log
+Bowtie 2	all_sections	hisat2_Female_C6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_OV_2.log
+Bowtie 2	all_sections	hisat2_Female_C6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_C6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_C6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_C6_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_H12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H12_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_H12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H12_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_H12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H12_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_H3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H3_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_H3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H3_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_H3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H3_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_H6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_H_1.log
+Bowtie 2	all_sections	hisat2_Female_H6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_H_2.log
+Bowtie 2	all_sections	hisat2_Female_H6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_OV_1.log
+Bowtie 2	all_sections	hisat2_Female_H6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_OV_2.log
+Bowtie 2	all_sections	hisat2_Female_H6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_H6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_H6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_H6_RT_3.log
+Bowtie 2	all_sections	hisat2_Female_V_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_CR_1.log
+Bowtie 2	all_sections	hisat2_Female_V_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_CR_2.log
+Bowtie 2	all_sections	hisat2_Female_V_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_H_1.log
+Bowtie 2	all_sections	hisat2_Female_V_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_H_2.log
+Bowtie 2	all_sections	hisat2_Female_V_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_OV_1.log
+Bowtie 2	all_sections	hisat2_Female_V_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_OV_2.log
+Bowtie 2	all_sections	hisat2_Female_V_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_RT_1.log
+Bowtie 2	all_sections	hisat2_Female_V_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_RT_2.log
+Bowtie 2	all_sections	hisat2_Female_V_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Female_V_RT_3.log
+Bowtie 2	all_sections	hisat2_Male_AG_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_AG_1.log
+Bowtie 2	all_sections	hisat2_Male_AG_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_AG_2.log
+Bowtie 2	all_sections	hisat2_Male_AG_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_AG_3.log
+Bowtie 2	all_sections	hisat2_Male_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_CR_1.log
+Bowtie 2	all_sections	hisat2_Male_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_CR_2.log
+Bowtie 2	all_sections	hisat2_Male_CR_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_CR_3.log
+Bowtie 2	all_sections	hisat2_Male_EB_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_EB_1.log
+Bowtie 2	all_sections	hisat2_Male_EB_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_EB_2.log
+Bowtie 2	all_sections	hisat2_Male_TS_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_TS_1.log
+Bowtie 2	all_sections	hisat2_Male_TS_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_TS_2.log
+Bowtie 2	all_sections	hisat2_Male_TS_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/HISAT-2/hisat2_Male_TS_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C12_RT_1/annotated_bowtie2_Female_C12_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C12_RT_2/annotated_bowtie2_Female_C12_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C12_RT_3/annotated_bowtie2_Female_C12_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C3_RT_1/annotated_bowtie2_Female_C3_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C3_RT_2/annotated_bowtie2_Female_C3_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C3_RT_3/annotated_bowtie2_Female_C3_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_H_1/annotated_bowtie2_Female_C6_H_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_H_2/annotated_bowtie2_Female_C6_H_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_OV_1/annotated_bowtie2_Female_C6_OV_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_OV_2/annotated_bowtie2_Female_C6_OV_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_RT_1/annotated_bowtie2_Female_C6_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_RT_2/annotated_bowtie2_Female_C6_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_C6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_C6_RT_3/annotated_bowtie2_Female_C6_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H12_RT_1/annotated_bowtie2_Female_H12_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H12_RT_2/annotated_bowtie2_Female_H12_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H12_RT_3/annotated_bowtie2_Female_H12_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H3_RT_1/annotated_bowtie2_Female_H3_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H3_RT_2/annotated_bowtie2_Female_H3_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H3_RT_3/annotated_bowtie2_Female_H3_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_H_1/annotated_bowtie2_Female_H6_H_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_H_2/annotated_bowtie2_Female_H6_H_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_OV_1/annotated_bowtie2_Female_H6_OV_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_OV_2/annotated_bowtie2_Female_H6_OV_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_RT_1/annotated_bowtie2_Female_H6_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_RT_2/annotated_bowtie2_Female_H6_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_H6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_H6_RT_3/annotated_bowtie2_Female_H6_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_CR_1/annotated_bowtie2_Female_V_CR_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_CR_2/annotated_bowtie2_Female_V_CR_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_H_1/annotated_bowtie2_Female_V_H_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_H_2/annotated_bowtie2_Female_V_H_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_OV_1/annotated_bowtie2_Female_V_OV_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_OV_2/annotated_bowtie2_Female_V_OV_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_RT_1/annotated_bowtie2_Female_V_RT_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_RT_2/annotated_bowtie2_Female_V_RT_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Female_V_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Female_V_RT_3/annotated_bowtie2_Female_V_RT_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_AG_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_AG_1/annotated_bowtie2_Male_AG_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_AG_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_AG_2/annotated_bowtie2_Male_AG_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_AG_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_AG_3/annotated_bowtie2_Male_AG_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_CR_1/annotated_bowtie2_Male_CR_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_CR_2/annotated_bowtie2_Male_CR_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_CR_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_CR_3/annotated_bowtie2_Male_CR_3.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_EB_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_EB_1/annotated_bowtie2_Male_EB_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_EB_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_EB_2/annotated_bowtie2_Male_EB_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_TS_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_TS_1/annotated_bowtie2_Male_TS_1.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_TS_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_TS_2/annotated_bowtie2_Male_TS_2.log
+Bowtie 2	all_sections	annotated_bowtie2_Male_TS_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Genome/annotated_eXpress/Male_TS_3/annotated_bowtie2_Male_TS_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C12_RT_1/PASA_bowtie2_Female_C12_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C12_RT_2/PASA_bowtie2_Female_C12_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C12_RT_3/PASA_bowtie2_Female_C12_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C3_RT_1/PASA_bowtie2_Female_C3_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C3_RT_2/PASA_bowtie2_Female_C3_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C3_RT_3/PASA_bowtie2_Female_C3_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_H_1/PASA_bowtie2_Female_C6_H_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_H_2/PASA_bowtie2_Female_C6_H_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_OV_1/PASA_bowtie2_Female_C6_OV_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_OV_2/PASA_bowtie2_Female_C6_OV_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_RT_1/PASA_bowtie2_Female_C6_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_RT_2/PASA_bowtie2_Female_C6_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_C6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_C6_RT_3/PASA_bowtie2_Female_C6_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H12_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H12_RT_1/PASA_bowtie2_Female_H12_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H12_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H12_RT_2/PASA_bowtie2_Female_H12_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H12_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H12_RT_3/PASA_bowtie2_Female_H12_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H3_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H3_RT_1/PASA_bowtie2_Female_H3_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H3_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H3_RT_2/PASA_bowtie2_Female_H3_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H3_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H3_RT_3/PASA_bowtie2_Female_H3_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_H_1/PASA_bowtie2_Female_H6_H_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_H_2/PASA_bowtie2_Female_H6_H_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_OV_1/PASA_bowtie2_Female_H6_OV_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_OV_2/PASA_bowtie2_Female_H6_OV_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_RT_1/PASA_bowtie2_Female_H6_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_RT_2/PASA_bowtie2_Female_H6_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_H6_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_H6_RT_3/PASA_bowtie2_Female_H6_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_CR_1/PASA_bowtie2_Female_V_CR_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_CR_2/PASA_bowtie2_Female_V_CR_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_H_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_H_1/PASA_bowtie2_Female_V_H_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_H_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_H_2/PASA_bowtie2_Female_V_H_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_OV_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_OV_1/PASA_bowtie2_Female_V_OV_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_OV_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_OV_2/PASA_bowtie2_Female_V_OV_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_RT_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_RT_1/PASA_bowtie2_Female_V_RT_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_RT_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_RT_2/PASA_bowtie2_Female_V_RT_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Female_V_RT_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Female_V_RT_3/PASA_bowtie2_Female_V_RT_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_AG_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_AG_1/PASA_bowtie2_Male_AG_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_AG_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_AG_2/PASA_bowtie2_Male_AG_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_AG_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_AG_3/PASA_bowtie2_Male_AG_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_CR_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_CR_1/PASA_bowtie2_Male_CR_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_CR_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_CR_2/PASA_bowtie2_Male_CR_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_CR_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_CR_3/PASA_bowtie2_Male_CR_3.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_EB_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_EB_1/PASA_bowtie2_Male_EB_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_EB_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_EB_2/PASA_bowtie2_Male_EB_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_TS_1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_TS_1/PASA_bowtie2_Male_TS_1.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_TS_2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_TS_2/PASA_bowtie2_Male_TS_2.log
+Bowtie 2	all_sections	PASA_bowtie2_Male_TS_3	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/Trinity/pasa/eXpress/Male_TS_3/PASA_bowtie2_Male_TS_3.log
+FastQC	all_sections	Female_C12_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C12_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_C12_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C12_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_C12_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C12_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_C3_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C3_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_C3_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C3_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_C3_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C3_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_C6_H_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_H_1.R1_fastqc.zip
+FastQC	all_sections	Female_C6_H_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_H_2.R1_fastqc.zip
+FastQC	all_sections	Female_C6_OV_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_OV_1.R1_fastqc.zip
+FastQC	all_sections	Female_C6_OV_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_OV_2.R1_fastqc.zip
+FastQC	all_sections	Female_C6_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_C6_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_C6_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_C6_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_H12_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H12_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_H12_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H12_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_H12_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H12_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_H3_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H3_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_H3_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H3_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_H3_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H3_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_H6_H_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_H_1.R1_fastqc.zip
+FastQC	all_sections	Female_H6_H_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_H_2.R1_fastqc.zip
+FastQC	all_sections	Female_H6_OV_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_OV_1.R1_fastqc.zip
+FastQC	all_sections	Female_H6_OV_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_OV_2.R1_fastqc.zip
+FastQC	all_sections	Female_H6_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_H6_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_H6_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_H6_RT_3.R1_fastqc.zip
+FastQC	all_sections	Female_V_CR_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_CR_1.R1_fastqc.zip
+FastQC	all_sections	Female_V_CR_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_CR_2.R1_fastqc.zip
+FastQC	all_sections	Female_V_H_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_H_1.R1_fastqc.zip
+FastQC	all_sections	Female_V_H_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_H_2.R1_fastqc.zip
+FastQC	all_sections	Female_V_OV_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_OV_1.R1_fastqc.zip
+FastQC	all_sections	Female_V_OV_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_OV_2.R1_fastqc.zip
+FastQC	all_sections	Female_V_RT_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_RT_1.R1_fastqc.zip
+FastQC	all_sections	Female_V_RT_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_RT_2.R1_fastqc.zip
+FastQC	all_sections	Female_V_RT_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Female_V_RT_3.R1_fastqc.zip
+FastQC	all_sections	Male_AG_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_AG_1.R1_fastqc.zip
+FastQC	all_sections	Male_AG_1.R2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_AG_1.R2_fastqc.zip
+FastQC	all_sections	Male_AG_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_AG_2.R1_fastqc.zip
+FastQC	all_sections	Male_AG_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_AG_3.R1_fastqc.zip
+FastQC	all_sections	Male_CR_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_CR_1.R1_fastqc.zip
+FastQC	all_sections	Male_CR_1.R2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_CR_1.R2_fastqc.zip
+FastQC	all_sections	Male_CR_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_CR_2.R1_fastqc.zip
+FastQC	all_sections	Male_CR_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_CR_3.R1_fastqc.zip
+FastQC	all_sections	Male_EB_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_EB_1.R1_fastqc.zip
+FastQC	all_sections	Male_EB_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_EB_2.R1_fastqc.zip
+FastQC	all_sections	Male_TS_1.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_TS_1.R1_fastqc.zip
+FastQC	all_sections	Male_TS_1.R2	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_TS_1.R2_fastqc.zip
+FastQC	all_sections	Male_TS_2.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_TS_2.R1_fastqc.zip
+FastQC	all_sections	Male_TS_3.R1	/fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/fastQC/Male_TS_3.R1_fastqc.zip

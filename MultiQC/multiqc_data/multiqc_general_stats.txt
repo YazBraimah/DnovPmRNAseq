@@ -1,0 +1,188 @@
+Sample	FastQC_percent_duplicates-1	FastQC_percent_gc-1	FastQC_avg_sequence_length-1	FastQC_percent_fails-1	FastQC_total_sequences-1	Bowtie 2_overall_alignment_rate-1
+Female_C12_RT_1.R1	36.629287531591494	47.0	88.85512168586996	25.0	20916726.0	
+Female_C12_RT_2.R1	41.11353427393709	47.0	88.73813564516932	16.666666666666664	30522119.0	
+Female_C12_RT_3.R1	72.1639717261225	47.0	89.93029383475842	33.33333333333333	30402734.0	
+Female_C3_RT_1.R1	67.49942079795042	48.0	89.91678180061713	33.33333333333333	21451101.0	
+Female_C3_RT_2.R1	66.94361704456529	48.0	89.9311326959797	33.33333333333333	24462610.0	
+Female_C3_RT_3.R1	68.90114646707944	48.0	89.93346861544786	33.33333333333333	26378949.0	
+Female_C6_H_1.R1	66.82930730699286	47.0	89.89722405322964	25.0	54464553.0	
+Female_C6_H_2.R1	54.54922840274647	46.0	89.29560547247794	33.33333333333333	21873455.0	
+Female_C6_OV_1.R1	69.81408196814783	49.0	90.8407263801331	25.0	53594142.0	
+Female_C6_OV_2.R1	68.92541175225844	49.0	89.89901074130181	25.0	49710455.0	
+Female_C6_RT_1.R1	71.33310450503822	48.0	89.93664331245412	33.33333333333333	32226306.0	
+Female_C6_RT_2.R1	72.64859263638576	48.0	89.9318570320238	33.33333333333333	37738773.0	
+Female_C6_RT_3.R1	29.87051925794924	49.0	89.44014743030121	25.0	23530034.0	
+Female_H12_RT_1.R1	77.2803491717997	48.0	89.9408607333875	25.0	48231474.0	
+Female_H12_RT_2.R1	77.42951090226802	47.0	89.93987712168877	25.0	52789788.0	
+Female_H12_RT_3.R1	76.10390526289373	47.0	89.93708612926089	33.33333333333333	49017871.0	
+Female_H3_RT_1.R1	75.94088960859668	48.0	89.93377770829794	25.0	54429859.0	
+Female_H3_RT_2.R1	69.70669956059956	48.0	89.9396052265777	33.33333333333333	27876750.0	
+Female_H3_RT_3.R1	76.59591464174206	48.0	89.93970605376867	25.0	49269623.0	
+Female_H6_H_1.R1	64.02028222163491	47.0	89.92709742563545	25.0	21432357.0	
+Female_H6_H_2.R1	65.41527425769661	48.0	89.94208315762168	33.33333333333333	23079953.0	
+Female_H6_OV_1.R1	66.40071625264349	48.0	89.94331988997273	33.33333333333333	21835314.0	
+Female_H6_OV_2.R1	67.79653786366612	49.0	89.92614280297192	25.0	22500204.0	
+Female_H6_RT_1.R1	76.92198395354521	48.0	89.93380446992579	25.0	63461143.0	
+Female_H6_RT_2.R1	78.82275847067403	48.0	89.93950348609279	25.0	66379329.0	
+Female_H6_RT_3.R1	72.51370785298232	48.0	89.93615823863325	25.0	29679225.0	
+Female_V_CR_1.R1	69.06448939022395	48.0	89.92213245689983	25.0	23575548.0	
+Female_V_CR_2.R1	71.03384633014707	48.0	89.93622868672455	33.33333333333333	23450701.0	
+Female_V_H_1.R1	66.47514615294975	47.0	89.92846110982805	41.66666666666667	29447787.0	
+Female_V_H_2.R1	62.109010997963004	47.0	89.93390108881835	41.66666666666667	21852130.0	
+Female_V_OV_1.R1	65.82974355045377	49.0	89.92118526586857	25.0	22188237.0	
+Female_V_OV_2.R1	65.41836639646883	48.0	89.93322052838683	33.33333333333333	22964123.0	
+Female_V_RT_1.R1	75.50915078505489	47.0	89.93620717406111	25.0	42005413.0	
+Female_V_RT_2.R1	73.22369047229591	47.0	89.93355423528357	25.0	36750845.0	
+Female_V_RT_3.R1	76.76343767665975	48.0	89.93382998071323	25.0	51539988.0	
+Male_AG_1.R1	74.96035541074642	43.0	89.5802613695365	16.666666666666664	16172581.0	
+Male_AG_1.R2	75.19298729570745	43.0	89.91874914709038	16.666666666666664	16172581.0	
+Male_AG_2.R1	84.47352673103026	45.0	86.66507936003019	25.0	47155350.0	
+Male_AG_3.R1	83.43983460876206	46.0	86.4052327517135	16.666666666666664	37498435.0	
+Male_CR_1.R1	60.504541860057344	43.0	89.55831977792948	25.0	15133571.0	
+Male_CR_1.R2	60.97530355137459	43.0	89.88008639864313	25.0	15133571.0	
+Male_CR_2.R1	69.53102185472486	45.0	84.52087665038376	33.33333333333333	21180074.0	
+Male_CR_3.R1	61.0278916409723	47.0	81.55633198971357	25.0	20651676.0	
+Male_EB_1.R1	83.18783696678146	47.0	87.84852771430378	16.666666666666664	53484728.0	
+Male_EB_2.R1	72.30620712649251	49.0	82.4462892289045	33.33333333333333	24988526.0	
+Male_TS_1.R1	56.70267483964144	47.0	89.0640265483216	25.0	26854579.0	
+Male_TS_1.R2	51.497149469475964	47.0	89.61150651440114	25.0	26854579.0	
+Male_TS_2.R1	68.13043662757035	48.0	86.53396138873883	16.666666666666664	31556027.0	
+Male_TS_3.R1	66.74695351000369	49.0	86.14460653693294	16.666666666666664	32925441.0	
+PASA_bowtie2_Female_C12_RT_1						67.44
+PASA_bowtie2_Female_C12_RT_2						68.91
+PASA_bowtie2_Female_C12_RT_3						66.08
+PASA_bowtie2_Female_C3_RT_1						64.61
+PASA_bowtie2_Female_C3_RT_2						65.59
+PASA_bowtie2_Female_C3_RT_3						65.16
+PASA_bowtie2_Female_C6_H_1						80.6
+PASA_bowtie2_Female_C6_H_2						78.99
+PASA_bowtie2_Female_C6_OV_1						82.0
+PASA_bowtie2_Female_C6_OV_2						82.01
+PASA_bowtie2_Female_C6_RT_1						65.95
+PASA_bowtie2_Female_C6_RT_2						64.4
+PASA_bowtie2_Female_C6_RT_3						64.98
+PASA_bowtie2_Female_H12_RT_1						72.23
+PASA_bowtie2_Female_H12_RT_2						72.13
+PASA_bowtie2_Female_H12_RT_3						63.9
+PASA_bowtie2_Female_H3_RT_1						70.47
+PASA_bowtie2_Female_H3_RT_2						69.93
+PASA_bowtie2_Female_H3_RT_3						72.56
+PASA_bowtie2_Female_H6_H_1						82.53
+PASA_bowtie2_Female_H6_H_2						82.35
+PASA_bowtie2_Female_H6_OV_1						83.47
+PASA_bowtie2_Female_H6_OV_2						84.17
+PASA_bowtie2_Female_H6_RT_1						70.59
+PASA_bowtie2_Female_H6_RT_2						70.83
+PASA_bowtie2_Female_H6_RT_3						72.25
+PASA_bowtie2_Female_V_CR_1						83.6
+PASA_bowtie2_Female_V_CR_2						83.46
+PASA_bowtie2_Female_V_H_1						76.41
+PASA_bowtie2_Female_V_H_2						74.36
+PASA_bowtie2_Female_V_OV_1						83.17
+PASA_bowtie2_Female_V_OV_2						82.49
+PASA_bowtie2_Female_V_RT_1						70.99
+PASA_bowtie2_Female_V_RT_2						69.99
+PASA_bowtie2_Female_V_RT_3						72.23
+PASA_bowtie2_Male_AG_1						86.68
+PASA_bowtie2_Male_AG_2						87.02
+PASA_bowtie2_Male_AG_3						93.76
+PASA_bowtie2_Male_CR_1						88.61
+PASA_bowtie2_Male_CR_2						89.98
+PASA_bowtie2_Male_CR_3						86.16
+PASA_bowtie2_Male_EB_1						59.04
+PASA_bowtie2_Male_EB_2						63.45
+PASA_bowtie2_Male_TS_1						86.93
+PASA_bowtie2_Male_TS_2						94.83
+PASA_bowtie2_Male_TS_3						94.69
+annotated_bowtie2_Female_C12_RT_1						68.26
+annotated_bowtie2_Female_C12_RT_2						69.91
+annotated_bowtie2_Female_C12_RT_3						68.7
+annotated_bowtie2_Female_C3_RT_1						66.25
+annotated_bowtie2_Female_C3_RT_2						67.94
+annotated_bowtie2_Female_C3_RT_3						66.95
+annotated_bowtie2_Female_C6_H_1						73.53
+annotated_bowtie2_Female_C6_H_2						72.32
+annotated_bowtie2_Female_C6_OV_1						82.8
+annotated_bowtie2_Female_C6_OV_2						82.9
+annotated_bowtie2_Female_C6_RT_1						68.08
+annotated_bowtie2_Female_C6_RT_2						68.21
+annotated_bowtie2_Female_C6_RT_3						70.53
+annotated_bowtie2_Female_H12_RT_1						72.93
+annotated_bowtie2_Female_H12_RT_2						73.27
+annotated_bowtie2_Female_H12_RT_3						69.68
+annotated_bowtie2_Female_H3_RT_1						70.97
+annotated_bowtie2_Female_H3_RT_2						70.45
+annotated_bowtie2_Female_H3_RT_3						71.73
+annotated_bowtie2_Female_H6_H_1						74.71
+annotated_bowtie2_Female_H6_H_2						76.76
+annotated_bowtie2_Female_H6_OV_1						83.2
+annotated_bowtie2_Female_H6_OV_2						84.12
+annotated_bowtie2_Female_H6_RT_1						71.47
+annotated_bowtie2_Female_H6_RT_2						71.45
+annotated_bowtie2_Female_H6_RT_3						72.99
+annotated_bowtie2_Female_V_CR_1						77.63
+annotated_bowtie2_Female_V_CR_2						77.67
+annotated_bowtie2_Female_V_H_1						70.01
+annotated_bowtie2_Female_V_H_2						69.52
+annotated_bowtie2_Female_V_OV_1						83.23
+annotated_bowtie2_Female_V_OV_2						81.15
+annotated_bowtie2_Female_V_RT_1						70.3
+annotated_bowtie2_Female_V_RT_2						69.0
+annotated_bowtie2_Female_V_RT_3						71.56
+annotated_bowtie2_Male_AG_1						52.69
+annotated_bowtie2_Male_AG_2						54.47
+annotated_bowtie2_Male_AG_3						65.77
+annotated_bowtie2_Male_CR_1						63.15
+annotated_bowtie2_Male_CR_2						59.86
+annotated_bowtie2_Male_CR_3						62.9
+annotated_bowtie2_Male_EB_1						75.19
+annotated_bowtie2_Male_EB_2						70.1
+annotated_bowtie2_Male_TS_1						69.87
+annotated_bowtie2_Male_TS_2						80.53
+annotated_bowtie2_Male_TS_3						81.0
+hisat2_Female_C12_RT_1						92.78
+hisat2_Female_C12_RT_2						93.08
+hisat2_Female_C12_RT_3						94.49
+hisat2_Female_C3_RT_1						93.66
+hisat2_Female_C3_RT_2						93.85
+hisat2_Female_C3_RT_3						93.65
+hisat2_Female_C6_H_1						94.61
+hisat2_Female_C6_H_2						93.89
+hisat2_Female_C6_OV_1						97.04
+hisat2_Female_C6_OV_2						97.14
+hisat2_Female_C6_RT_1						93.37
+hisat2_Female_C6_RT_2						93.68
+hisat2_Female_C6_RT_3						93.52
+hisat2_Female_H12_RT_1						95.21
+hisat2_Female_H12_RT_2						95.32
+hisat2_Female_H12_RT_3						94.59
+hisat2_Female_H3_RT_1						94.78
+hisat2_Female_H3_RT_2						94.79
+hisat2_Female_H3_RT_3						94.67
+hisat2_Female_H6_H_1						94.9
+hisat2_Female_H6_H_2						95.16
+hisat2_Female_H6_OV_1						97.23
+hisat2_Female_H6_OV_2						97.3
+hisat2_Female_H6_RT_1						94.93
+hisat2_Female_H6_RT_2						95.09
+hisat2_Female_H6_RT_3						95.21
+hisat2_Female_V_CR_1						95.27
+hisat2_Female_V_CR_2						95.64
+hisat2_Female_V_H_1						93.56
+hisat2_Female_V_H_2						93.53
+hisat2_Female_V_OV_1						97.21
+hisat2_Female_V_OV_2						96.99
+hisat2_Female_V_RT_1						94.67
+hisat2_Female_V_RT_2						94.72
+hisat2_Female_V_RT_3						94.6
+hisat2_Male_AG_1						89.36
+hisat2_Male_AG_2						77.93
+hisat2_Male_AG_3						86.39
+hisat2_Male_CR_1						92.92
+hisat2_Male_CR_2						85.64
+hisat2_Male_CR_3						79.5
+hisat2_Male_EB_1						86.83
+hisat2_Male_EB_2						80.73
+hisat2_Male_TS_1						93.61
+hisat2_Male_TS_2						93.53
+hisat2_Male_TS_3						93.02

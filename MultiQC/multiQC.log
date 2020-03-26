@@ -1,0 +1,9 @@
+[INFO   ]         multiqc : This is MultiQC v1.3
+[INFO   ]         multiqc : Template    : default
+Searching 187 files..
+[INFO   ]         bowtie2 : Found 138 reports
+[INFO   ]          fastqc : Found 49 reports
+[INFO   ]         multiqc : Compressing plot data
+[INFO   ]         multiqc : Report      : ../../../../fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_report.html
+[INFO   ]         multiqc : Data        : ../../../../fs/cbsufsrv5/data1/ya76/Snakemake.Output.Folders/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/MultiQC/multiqc_data
+[INFO   ]         multiqc : MultiQC complete
