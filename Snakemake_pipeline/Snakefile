@@ -1,0 +1,1311 @@
+"""
+Author: Y. Ahmed-Braimah
+--- RNA-seq analysis workflow for D. novamexicana RNAseq.
+
+"""
+
+import json
+import os
+import re
+from os.path import join, basename, dirname
+from os import getcwd
+from subprocess import check_output
+
+##--------------------------------------------------------------------------------------##
+## Functions
+##--------------------------------------------------------------------------------------##
+
+# To print process messages
+def message(x):
+  print()
+
+# To remove suffix from a string
+def rstrip(text, suffix):
+    if not text.endswith(suffix):
+        return text
+    return text[:len(text)-len(suffix)]
+
+## define environment variables
+
+##--------------------------------------------------------------------------------------##
+## Global config files: 
+##--------------------------------------------------------------------------------------##
+
+configfile: 'config.yml'
+
+# Full path to an uncompressed FASTA file with all chromosome sequences.
+DNA = config['DNA']
+GTF = config['GTF']
+INDEX = config['INDEX']
+
+# Full path to a folder where final output files will be deposited.
+OUT_DIR = config['OUT_DIR']
+WORK_DIR = config['WORK_DIR']
+HOME_DIR = config['HOME_DIR']  # the "launch_snakemake.sh" and "config.yml" files should be here
+
+# files/paths required for Trinotate
+SHARED_DATABASE = config['SHARED_DATABASE']
+CUSTOM_DATABASE = config['CUSTOM_DATABASE']
+TRINOTATE_HOME = config['TRINOTATE_HOME']
+SQLITE = config['SQLITE']
+
+## set the usr and job environments for each job (specific for CBSU qsub jobs)
+USER = os.environ.get('USER')
+JOB_ID = os.environ.get('JOB_ID')
+
+# Samples and their corresponding filenames.
+# single-end
+seFILES = json.load(open(config['SE_SAMPLES_JSON'])) 
+seSAMPLES = sorted(seFILES.keys())                  
+# paired-end:
+peFILES = json.load(open(config['PE_SAMPLES_JSON'])) 
+peSAMPLES = sorted(peFILES.keys())  
+# female files:
+femFILES = json.load(open(config['FEM_SAMPLES_JSON'])) 
+# femSAMPLES = sorted(femFILES.keys())          
+
+# read both
+# FILES = json.load(open(config['SAMPLES_JSON']))
+combinedSam = [peSAMPLES, seSAMPLES]
+SAMPLES = [y for x in combinedSam for y in x]
+femSAMPLES = filter(lambda x:"Female" in x, SAMPLES)
+
+## Create the final output directory if it doesn't already exist
+if not os.path.exists(OUT_DIR):
+            os.makedirs(OUT_DIR)
+
+##--------------------------------------------------------------------------------------##
+#
+# _____ _             _               _               _       
+#|  ___(_)_ __   __ _| |   ___  _   _| |_ _ __  _   _| |_ ___ 
+#| |_  | | '_ \ / _` | |  / _ \| | | | __| '_ \| | | | __/ __|
+#|  _| | | | | | (_| | | | (_) | |_| | |_| |_) | |_| | |_\__ \
+#|_|   |_|_| |_|\__,_|_|  \___/ \__,_|\__| .__/ \__,_|\__|___/
+#                                        |_|                  
+##--------------------------------------------------------------------------------------##
+
+## Final expected output(s)
+rule all: 
+    input:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', 'annotated.gene.TMM.EXPR.matrix'),
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'pasa.gene.TMM.EXPR.matrix'),
+        join(OUT_DIR, 'MultiQC', 'multiqc_report.html'),
+        join(OUT_DIR, 'Trinotate', 'PASA', 'Trinotate_report.xls.gene_ontology'),
+        join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_genome.outfmt6'),
+        join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_annotated.outfmt6'),
+        join(OUT_DIR, 'StringTie', 'gffcmp.annotated.gtf')
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+#  ___   ____ 
+# / _ \ / ___|
+#| | | | |    
+#| |_| | |___ 
+# \__\_\\____|
+#             
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to check raw SE read quality
+rule fastqcSE:
+    input:
+        r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
+    output:
+        r1 = join(OUT_DIR, 'fastQC', '{sample}' + '.R1_fastqc.html')
+    log:
+        join(OUT_DIR, 'fastQC', '{sample}' + '.fastQC_se.log')
+    benchmark:
+        join(OUT_DIR, 'fastQC', '{sample}' + '.fastQC_se.benchmark.tsv')
+    message: 
+        """--- Checking read quality of SE sample "{wildcards.sample}" with FastQC """
+    run:
+        if not os.path.exists(join(OUT_DIR, 'fastQC')):
+            os.makedirs(join(OUT_DIR, 'fastQC'))
+
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.r1} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && fastqc {wildcards.sample}.R1.fq.gz' 
+                ' > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID) + '/*fastqc* ' + join(OUT_DIR, 'fastQC'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to check raw PE read quality
+rule fastqcPE:
+    input:
+        r1 = lambda wildcards: peFILES[wildcards.sample]['R1'],
+        r2 = lambda wildcards: peFILES[wildcards.sample]['R2']
+    output:
+        r1 = join(OUT_DIR, 'fastQC', '{sample}' + '.R1_fastqc.html'),
+        r2 = join(OUT_DIR, 'fastQC', '{sample}' + '.R2_fastqc.html')
+    log:
+        join(OUT_DIR, 'fastQC', '{sample}' + '.fastQC_init_pe.log')
+    benchmark:
+        join(OUT_DIR, 'fastQC', '{sample}' + '.fastQC_init_pe.benchmark.tsv')
+    message: 
+        """--- Checking read quality of PE sample "{wildcards.sample}" with FastQC """
+    run:
+        if not os.path.exists(join(OUT_DIR, 'fastQC')):
+            os.makedirs(join(OUT_DIR, 'fastQC'))
+
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.r1} {input.r2} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && fastqc {wildcards.sample}.R1.fq.gz {wildcards.sample}.R2.fq.gz' 
+                ' > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID) + '/*fastqc* ' + join(OUT_DIR, 'fastQC'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+#
+# _____                   _      ____  
+#|_   _|   ___  _____  __| | ___|___ \ 
+#  | || | | \ \/ / _ \/ _` |/ _ \ __) |
+#  | || |_| |>  <  __/ (_| | (_) / __/ 
+#  |_| \__,_/_/\_\___|\__,_|\___/_____|
+#                                      
+#
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to map PE reads with HISAT2
+rule hisat2_se_mapping:
+    input:
+        r1 = lambda wildcards: seFILES[wildcards.sample]['R1']
+    output:
+        bam = join(OUT_DIR, 'HISAT-2', '{sample}', '{sample}.csorted.hisat2.bam')
+    log:
+        join(OUT_DIR, 'HISAT-2', 'hisat2_{sample}.log')
+    benchmark:
+        join(OUT_DIR, 'HISAT-2', '{sample}', 'hs2_map_se.benchmark.tsv')
+    message: 
+        """--- Mapping SE reads for sample {wildcards.sample} to genome with HISAT-2 """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(DNA + '*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(INDEX, '*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.r1} ' + join(WORK_DIR, USER, JOB_ID))
+        if 'Female' in wildcards.sample:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && (hisat2'
+                ' -p 8'
+                ' --no-unal'
+                ' --rna-strandness R'
+                ' --dta'
+                ' --mp 1,0'
+                ' -x ' + join(rstrip(os.path.basename(DNA), '.fa') + '_tran') +
+                ' -U {wildcards.sample}.R1.fq.gz) 2>{log}'
+                ' | samtools sort -@ 8 -o csorted.hisat2.bam -')
+        else:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && (hisat2'
+                ' -p 8'
+                ' --no-unal'
+                ' --dta'
+                ' --mp 1,0'
+                ' -x ' + join(rstrip(os.path.basename(DNA), '.fa') + '_tran') +
+                ' -U {wildcards.sample}.R1.fq.gz) 2>{log}'
+                ' | samtools sort -@ 8 -o csorted.hisat2.bam -')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'csorted.hisat2.bam') + ' ' + join(OUT_DIR, 'HISAT-2', '{wildcards.sample}', '{wildcards.sample}' + '.csorted.hisat2.bam'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to check raw PE read quality
+rule hisat2_pe_mapping:
+    input:
+        r1 = lambda wildcards: peFILES[wildcards.sample]['R1'],
+        r2 = lambda wildcards: peFILES[wildcards.sample]['R2']
+    output:
+        bam = join(OUT_DIR, 'HISAT-2', '{sample}', '{sample}.csorted.hisat2.bam')
+    log:
+        join(OUT_DIR, 'HISAT-2', 'hisat2_{sample}.log')
+    benchmark:
+        join(OUT_DIR, 'HISAT-2', '{sample}', 'hs2_map_pe.benchmark.tsv')
+    message: 
+        """--- Mapping PE reads for sample {wildcards.sample} to genome with HISAT-2 """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(DNA + '*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(INDEX, '*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.r1} {input.r2} ' + join(WORK_DIR, USER, JOB_ID))
+        shell('cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && (hisat2'
+                ' -p 8'
+                ' --no-unal'
+                ' --dta'
+                ' --mp 1,0'
+                ' -x ' + join(rstrip(os.path.basename(DNA), '.fa') + '_tran') +
+                ' -1 {wildcards.sample}.R1.fq.gz'
+                ' -2 {wildcards.sample}.R2.fq.gz)'
+                ' 2>{log}'
+                ' | samtools sort -@ 8 -o csorted.hisat2.bam -')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'csorted.hisat2.bam') + ' ' + join(OUT_DIR, 'HISAT-2', '{wildcards.sample}', '{wildcards.sample}' + '.csorted.hisat2.bam'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to assemble transcripts with StringTie
+rule stringtie_assembly:
+    input:
+        bam = join(OUT_DIR, 'HISAT-2', '{sample}', '{sample}' + '.csorted.hisat2.bam')
+    output:
+        asmbly = join(OUT_DIR, 'StringTie', '{sample}', '{sample}' + '.gtf')
+    params:
+        gtf = GTF
+    log:
+        join(OUT_DIR, 'StringTie', '{sample}', 'st_asmbly.log')
+    benchmark:
+        join(OUT_DIR, 'StringTie', '{sample}', 'st_asmbly.benchmark.tsv')
+    message: 
+        """--- Assembling transcripts for sample {wildcards.sample} with StringTie """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {params.gtf} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.bam} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && stringtie'
+                ' {wildcards.sample}.csorted.hisat2.bam'
+                ' -p 8'
+                ' -G ' + os.path.basename(GTF) +
+                ' -o {wildcards.sample}.gtf'
+                ' -l {wildcards.sample} > {log}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '{wildcards.sample}.gtf') + ' ' + join(OUT_DIR, 'StringTie', '{wildcards.sample}'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to merge StringTie assemblies
+rule merge_assemblies:
+    input:
+        assemblies = expand(join(OUT_DIR, 'StringTie', '{sample}', '{sample}' + '.gtf'), sample = SAMPLES)
+    output:
+        asmbly = join(OUT_DIR, 'StringTie', 'stringtie_merged.gtf')
+    params:
+        gtf = GTF
+    log:
+        join(OUT_DIR, 'StringTie', 'st_mrg.log')
+    benchmark:
+        join(OUT_DIR, 'StringTie', 'st_mrg.benchmark.tsv')
+    message: 
+        """--- Merging StringTie transcripts """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {params.gtf} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && ls -1 ' + join(OUT_DIR) + '/StringTie/*/*.gtf > ' + join(OUT_DIR, 'StringTie', 'assemblies.txt') +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && stringtie'
+                ' --merge'
+                ' -p 4'
+                ' -G ' + os.path.basename(GTF) +
+                ' -o stringtie_merged.gtf ' + join(OUT_DIR, 'StringTie', 'assemblies.txt'))
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'stringtie_merged.gtf') + ' ' + join(OUT_DIR, 'StringTie'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to merge StringTie assemblies
+rule compare_gtf:
+    input:
+        STasmbly = rules.merge_assemblies.output.asmbly
+    output:
+        asmbly = join(OUT_DIR, 'StringTie', 'gffcmp.annotated.gtf')
+    params:
+        gtf = GTF
+    message: 
+        """--- Comparing StringTie merged assembly with reference GTF """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {params.gtf} {input.STasmbly} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && gffcompare'
+                ' -G'
+                ' -r ' + os.path.basename(GTF) +
+                ' stringtie_merged.gtf')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'gffcmp.*') + ' ' + join(OUT_DIR, 'StringTie'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+# _____     _       _ _         
+#|_   _| __(_)_ __ (_) |_ _   _ 
+#  | || '__| | '_ \| | __| | | |
+#  | || |  | | | | | | |_| |_| |
+#  |_||_|  |_|_| |_|_|\__|\__, |
+#                         |___/ 
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+
+## Rule to run genome-guided Trinity assembly
+rule ggTrinity:
+    input:
+        bam = expand(join(OUT_DIR, 'HISAT-2', '{sample}', '{sample}' + '.csorted.hisat2.bam'), sample = SAMPLES)
+    output:
+        gg_trin = join(OUT_DIR, 'Trinity', 'ggTrinity', 'trinity_gg', 'Trinity-GG.fasta')
+    log:
+        join(OUT_DIR, 'Trinity', 'ggTrinity', 'ggTrinity.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'ggTrinity', 'ggTrinity.benchmark.tsv')
+    message: 
+        """--- Assembling mapped reads with genome-guided Trinity """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(OUT_DIR, 'HISAT-2', 'Male*_1', '*.csorted.hisat2.bam') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(OUT_DIR, 'HISAT-2', 'Male*_2', '*.csorted.hisat2.bam') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(OUT_DIR, 'HISAT-2', 'Female_V*_3', '*.csorted.hisat2.bam') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(OUT_DIR, 'HISAT-2', 'Female_C*_3', '*.csorted.hisat2.bam') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(OUT_DIR, 'HISAT-2', 'Female_H6*_3', '*.csorted.hisat2.bam') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && rm Male_EB_1.csorted.hisat2.bam'
+                ' && ls -1 Female_*.csorted.hisat2.bam Male*.csorted.hisat2.bam > bam.list'
+                ' && samtools merge -b bam.list alignments.hisat2.bam'
+                ' && Trinity'
+                ' --genome_guided_bam alignments.hisat2.bam'
+                ' --genome_guided_max_intron 70000'
+                ' --full_cleanup'
+                ' --max_memory 128G'
+                ' --CPU 16'
+                ' --output trinity_gg'
+                ' 2>{log}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'trinity_gg') + ' ' + join(OUT_DIR, 'Trinity', 'ggTrinity'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule to run de-novo Trinity asssembly on the strand-specific, unmapped female reads
+rule dnTrinity:
+    # input:
+    #     r1 = lambda wildcards: peFILES[wildcards.sample]['R1'],
+    #     r2 = lambda wildcards: peFILES[wildcards.sample]['R2']
+    output:
+        dn_trin = join(OUT_DIR, 'Trinity', 'dnTrinity', 'trinity_deNovo.Trinity.fasta')
+    log:
+        join(OUT_DIR, 'Trinity', 'dnTrinity', 'dnTrinity.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'dnTrinity', 'dnTrinity.benchmark.tsv')
+    message: 
+        """--- Assembling all reads with Trinity de-novo"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Male*_1.R1.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Male*_1.R2.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Male*_2.R1.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Female_V_*_3.R1.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Female_C*_3.R1.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp /fs/cbsufsrv5/data2/ya76/Virilis_group_Stuff/novamexicana_reads/Female_H6*_3.R1.fq.gz ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && rm Male_EB_1.R1.fq.gz'
+                ' && zcat Male*_1.R1.fq.gz Male*_2.R1.fq.gz Female_C*_3.R1.fq.gz Female_H6*_3.R1.fq.gz Female_V*_3.R1.fq.gz | sed "/\@/ s/ 1:.*/\/1/g" | sed "/\@HISEQ/ s/$/\/1/g" | gzip - > all_left_reads.fq.gz'
+                ' && zcat Male*_1.R2.fq.gz | sed "/\@/ s/ 1:.*/\/2/g" | gzip - > all_right_reads.fq.gz'
+                ' && rm Male*.fq.gz Female*.fq.gz'
+                ' && Trinity'
+                ' --seqType fq'
+                ' --left all_left_reads.fq.gz'
+                ' --right all_right_reads.fq.gz'
+                ' --full_cleanup'
+                ' --max_memory 128G'
+                ' --CPU 16'
+                ' --output trinity_deNovo'
+                ' 2>{log}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'trinity_deNovo.Trinity.fasta') + ' ' + join(OUT_DIR, 'Trinity', 'dnTrinity'))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule pasa_comp_trans:
+    input:
+        dn_trin = rules.dnTrinity.output.dn_trin,
+        gg_trin = rules.ggTrinity.output.gg_trin
+    output:
+        pasa = join(OUT_DIR, 'Trinity', 'pasa', 'alignment.validations.output'),
+        compreh = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.fasta'),
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping')
+    log:
+        pasa = join(OUT_DIR, 'Trinity', 'pasa', 'pasa.log'),
+        comp_trans = join(OUT_DIR, 'Trinity', 'pasa', 'comp_trans.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'pasa', 'pasa_comp_trans.benchmark.tsv')        
+    message: 
+        "--- Building a Comprehensive Transcriptome Database with PASA"
+    run:
+        ## set-up
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp /programs/pasa/sample_data/alignAssembly.config ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp ' + DNA + ' ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.dn_trin} {input.gg_trin} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cat Trinity-GG.fasta trinity_deNovo.Trinity.fasta > transcripts.fasta' 
+              ' && ~/software/PASApipeline-pasa-v2.2.0/misc_utilities/accession_extractor.pl < trinity_deNovo.Trinity.fasta > tdn.accs')
+        ## start PASA docker instance and mysql:
+        shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && docker1 import /programs/pasa/pasa2.1.0_localdb.tar' 
+              ' && docker1 run -d -t -e PASAHOME=/usr/local/PASApipeline-2.1.0 biohpc_ya76/pasa2.1.0_localdb /bin/bash'
+              ' && cp -r /programs/pasa/mysql ' + join(WORK_DIR, USER) +
+              ' && chmod -R uog+rwX ' + join(WORK_DIR, USER, 'mysql') +
+              ' && docker1 exec $(docker1 ps -q) service mysql start')
+        ## run PASA
+        shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && docker1 exec'
+              ' $(docker1 ps -q) /bin/bash'
+              ' -c '
+              ' "cd ' + join(WORK_DIR, JOB_ID) + ';'
+              ' \$PASAHOME/scripts/Launch_PASA_pipeline.pl'
+              ' -c alignAssembly.config'
+              ' -C -R '
+              ' -g ' + os.path.basename(DNA) +
+              ' -t transcripts.fasta'
+              ' --ALIGNERS blat,gmap'
+              ' --TDN tdn.accs'
+              ' --CPU 8"'
+              ' > {log.pasa} 2>&1 ')
+        ## run comprehensie transcriptome annotation
+        shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && docker1 exec'
+              ' $(docker1 ps -q) /bin/bash'
+              ' -c '
+              ' "cd ' + join(WORK_DIR, JOB_ID) + ';'
+              ' \$PASAHOME/scripts/build_comprehensive_transcriptome.dbi'
+              ' -c alignAssembly.config'
+              ' -t transcripts.fasta'
+              ' --min_per_ID 95'
+              ' --min_per_aligned 30"'
+              ' > {log.comp_trans} 2>&1 '
+              ' && docker1 claim'
+              ' && sed -i "/^[[:digit:]]/ s/^/gene/g" compreh_init_build/compreh_init_build.geneToTrans_mapping'
+              ' && sed -i "/^[[:digit:]]/ s/^/gene/g" compreh_init_build/compreh_init_build.details')
+        shell('cp -r ' + join(WORK_DIR, USER, JOB_ID) + '/* ' + join(OUT_DIR, 'Trinity', 'pasa'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID) + ' ' + join(WORK_DIR, USER, 'mysql'))
+
+
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for making a cDNA file from the new GTF file and the DNA, then prep index for bowtie2.
+rule prep_reference_pasa:
+    input:
+        transcripts = rules.pasa_comp_trans.output.compreh,
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping')
+    output:
+        checkpoint = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta.bowtie2.ok'),
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta')
+    log:
+        join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'logs', 'bt2_ref.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'logs', 'bt2_ref.benchmark.tsv')
+    message: 
+        "--- Building bowtie2 transcriptome index for PASA transcripts."
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.transcripts} {input.geneTrans} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts compreh_init_build.fasta'
+              ' --gene_trans_map compreh_init_build.geneToTrans_mapping'
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --prep_reference'
+              ' --output_dir trinity_transcriptome/'
+              ' > {log} 2>&1')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '*') + ' ' + join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for mapping PE reads to the new transcriptome file with bowtie2 and quantifying abundance with eXpress
+rule PASA_eXpress_pe:
+    input:
+        r1 = lambda wildcards: peFILES[wildcards.sample]['R1'],
+        r2 = lambda wildcards: peFILES[wildcards.sample]['R2'],
+        checkpoint = rules.prep_reference_pasa.output.checkpoint,
+        transcripts = rules.prep_reference_pasa.output.transcripts,
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping')
+    output:
+        results = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'results.xprs'),
+        aln_stats = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'PASA_bowtie2_{sample}.log')
+    log:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'PASA_bowtie2_{sample}.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'logs', 'eXpress.benchmark.tsv')
+    message: 
+        """--- Mapping "{wildcards.sample}" PE reads to PASA transcriptome with bowtie2 and quantifying abundance with eXpress."""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.r1} {input.r2} {input.geneTrans} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp ' + join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts compreh_init_build.fasta'
+              ' --seqType fq'
+              ' --left {wildcards.sample}.R1.fq.gz'
+              ' --right {wildcards.sample}.R2.fq.gz'
+              ' --gene_trans_map compreh_init_build.geneToTrans_mapping'
+              ' --thread_count 8'  
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --output_dir {wildcards.sample}'
+              ' > {log} 2>&1')
+        shell('awk \'/CMD: set/{{f=1;next}} /CMD: touch/{{f=0}} f\' {log} | sed "/bam/d" > {output.aln_stats}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '{wildcards.sample}') + '/* ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{wildcards.sample}'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for mapping SE reads to the new transcriptome file with bowtie2 and quantifying abundance with eXpress
+rule PASA_eXpress_se:
+    input:
+        r1 = lambda wildcards: seFILES[wildcards.sample]['R1'],
+        checkpoint = rules.prep_reference_pasa.output.checkpoint,
+        transcripts = rules.prep_reference_pasa.output.transcripts,
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping')
+    output:
+        results = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'results.xprs'),
+        aln_stats = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'PASA_bowtie2_{sample}.log')
+    log:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'logs', 'eXpress.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'logs', 'eXpress.benchmark.tsv')
+    message: 
+        """--- Mapping "{wildcards.sample}" SE reads to PASA transcriptome with bowtie2 and quantifying abundance with eXpress."""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.r1} {input.geneTrans} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp ' + join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta*') + ' ' + join(WORK_DIR, USER, JOB_ID))
+        if 'Female' in wildcards.sample:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && align_and_estimate_abundance.pl' 
+                ' --transcripts compreh_init_build.fasta'
+                ' --seqType fq'
+                ' --SS_lib_type R'
+                ' --single {wildcards.sample}.R1.fq.gz'
+                ' --gene_trans_map compreh_init_build.geneToTrans_mapping'
+                ' --thread_count 8'  
+                ' --est_method eXpress'
+                ' --aln_method bowtie2'
+                ' --output_dir {wildcards.sample}'
+                ' > {log} 2>&1')
+        else:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && align_and_estimate_abundance.pl' 
+                ' --transcripts compreh_init_build.fasta'
+                ' --seqType fq'
+                ' --single {wildcards.sample}.R1.fq.gz'
+                ' --gene_trans_map compreh_init_build.geneToTrans_mapping'
+                ' --thread_count 8'  
+                ' --est_method eXpress'
+                ' --aln_method bowtie2'
+                ' --output_dir {wildcards.sample}'
+                ' > {log} 2>&1')
+
+        shell('awk \'/CMD: set/{{f=1;next}} /CMD: touch/{{f=0}} f\' {log} | sed "/bam/d" > {output.aln_stats}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '{wildcards.sample}') + '/* ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{wildcards.sample}'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+rule PASA_merge_abundance:
+    input:
+        quants = expand(join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'results.xprs'), sample = SAMPLES),
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping')
+    output:
+        abundances = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'pasa.gene.TMM.EXPR.matrix'),
+        samplesList = join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'isoforms.samples.list')
+    log:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'abnd_merge.log')
+    benchmark:
+        join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'abnd_merge.benchmark.tsv')        
+    message: 
+        "--- Merging PASA eXpress outputs from all samples"
+    run:
+        shell('ls -1 ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '*', 'results.xprs') + ' > ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'isoforms.samples.list'))
+        shell('cd ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress') +
+                ' && abundance_estimates_to_matrix.pl'
+                ' --est_method eXpress'
+                ' --gene_trans_map {input.geneTrans}'
+                ' --name_sample_by_basedir'
+                ' --out_prefix pasa'
+                ' --quant_files ' + join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', 'isoforms.samples.list') +
+                ' > {log} 2>&1')
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+#                                             __  __                        
+#  __ _  ___ _ __   ___  _ __ ___   ___    ___\ \/ /_ __  _ __ ___  ___ ___ 
+# / _` |/ _ \ '_ \ / _ \| '_ ` _ \ / _ \  / _ \\  /| '_ \| '__/ _ \/ __/ __|
+#| (_| |  __/ | | | (_) | | | | | |  __/ |  __//  \| |_) | | |  __/\__ \__ \
+# \__, |\___|_| |_|\___/|_| |_| |_|\___|  \___/_/\_\ .__/|_|  \___||___/___/
+# |___/                                            |_|                      
+#
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+
+# Rule for making a cDNA file from the new GTF file and the DNA, then prep index for bowtie2.
+rule make_cdna:
+    input:
+        dna = DNA,
+        gtf = rules.merge_assemblies.output.asmbly
+    output:
+        cdna = join(OUT_DIR, 'gffread_transcriptome', 'gffread_transcripts.fa'),
+        geneTrans = join(OUT_DIR, 'gffread_transcriptome', 'gffread_transcripts.gene_trans_map')
+    log:
+        gffread = join(OUT_DIR, 'gffread_transcriptome', 'logs', 'gffread.log'),
+        trans_bt2 = join(OUT_DIR, 'gffread_transcriptome', 'logs', 'trans_bt2.log')
+    benchmark:
+        join(OUT_DIR, 'gffread_transcriptome', 'logs', 'gffread.benchmark.tsv')
+    message: 
+        "--- Building bowtie2 transcriptome index for gffread transcripts."
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.dna} {input.gtf} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+        # Extract a sequence for each transcript in the GTF file.
+              ' && samtools faidx ' + os.path.basename(DNA) +
+              ' && gffread -F -w gffread_transcripts.fa -g ' + os.path.basename(DNA) + ' stringtie_merged.gtf > {log.gffread}'
+        # Extract the FASTA header from the cDNA file and make into
+        # trans_map file.
+              ' && grep ">" gffread_transcripts.fa | sed "s/>//g" | sed "s/gene=//g" | awk \'{{print $2"\t"$1}}\' | sort -u > gffread_transcripts.gene_trans_map'
+        # output a genome format gff3 file
+              # ' && cufflinks_gtf_to_alignment_gff3.pl stringtie_merged.gtf > stringtie_merged.gff3'
+        # And finally make the index files.
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts gffread_transcripts.fa'
+              ' --gene_trans_map gffread_transcripts.gene_trans_map'
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --prep_reference'
+              ' --output_dir gffread_transcriptome/'
+              ' > {log.trans_bt2} 2>&1')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'gffread_transcripts*') + ' ' + join(OUT_DIR, 'gffread_transcriptome'))
+        # shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'stringtie_merged.gff3') + ' ' + join(OUT_DIR, 'gffread_transcriptome'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+#                         _        _           _       __  __                        
+#  __ _ _ __  _ __   ___ | |_ __ _| |_ ___  __| |   ___\ \/ /_ __  _ __ ___  ___ ___ 
+# / _` | '_ \| '_ \ / _ \| __/ _` | __/ _ \/ _` |  / _ \\  /| '_ \| '__/ _ \/ __/ __|
+#| (_| | | | | | | | (_) | || (_| | ||  __/ (_| | |  __//  \| |_) | | |  __/\__ \__ \
+# \__,_|_| |_|_| |_|\___/ \__\__,_|\__\___|\__,_|  \___/_/\_\ .__/|_|  \___||___/___/
+#                                                           |_|                      
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for making a cDNA file from the new GTF file and the DNA, then prep index for bowtie2.
+rule make_annotated_cdna:
+    input:
+        dna = DNA,
+        gtf = GTF
+    output:
+        cdna = join(OUT_DIR, 'gffread_annotated_transcriptome', 'gffread_annotated_transcripts.fa'),
+        geneTrans = join(OUT_DIR, 'gffread_annotated_transcriptome', 'gffread_annotated_transcripts.gene_trans_map')
+        # gff3 = join(OUT_DIR, 'gffread_transcriptome', 'stringtie_merged.gff3')
+    log:
+        gffread = join(OUT_DIR, 'gffread_annotated_transcriptome', 'logs', 'gffread.log'),
+        trans_bt2 = join(OUT_DIR, 'gffread_annotated_transcriptome', 'logs', 'trans_bt2.log')
+    benchmark:
+        join(OUT_DIR, 'gffread_annotated_transcriptome', 'logs', 'gffread.benchmark.tsv')
+    message: 
+        "--- Building bowtie2 transcriptome index for annotated gffread transcripts."
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.dna} {input.gtf} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+        # Extract a sequence for each transcript in the GTF file.
+              ' && samtools faidx ' + os.path.basename(DNA) + 
+              ' && gffread -F -w gffread_annotated_transcripts.fa -g ' + os.path.basename(DNA) + ' ' + os.path.basename(GTF) + ' > {log.gffread}'
+        # Extract the FASTA header from the cDNA file and make into
+        # trans_map file.
+              ' && grep ">" gffread_annotated_transcripts.fa | sed "s/>//g" | sed "s/gene=//g" | awk \'{{print $2"\t"$1}}\' | sort -u > gffread_annotated_transcripts.gene_trans_map'
+        # output a genome format gff3 file
+              # ' && cufflinks_gtf_to_alignment_gff3.pl stringtie_merged.gtf > stringtie_merged.gff3'
+        # And finally make the index files.
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts gffread_annotated_transcripts.fa'
+              ' --gene_trans_map gffread_annotated_transcripts.gene_trans_map'
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --prep_reference'
+              ' --output_dir gffread_annotated_transcriptome/'
+              ' > {log.trans_bt2} 2>&1')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'gffread_annotated_transcripts*') + ' ' + join(OUT_DIR, 'gffread_annotated_transcriptome'))
+        # shell('mv ' + join(WORK_DIR, USER, JOB_ID, 'stringtie_merged.gff3') + ' ' + join(OUT_DIR, 'gffread_transcriptome'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for mapping PE reads to the new transcriptome file with bowtie2 and quantifying abundance with eXpress
+rule annotated_eXpress_pe:
+    input:
+        r1 = lambda wildcards: peFILES[wildcards.sample]['R1'],
+        r2 = lambda wildcards: peFILES[wildcards.sample]['R2'],
+        cdna = rules.make_annotated_cdna.output.cdna,
+        geneTrans = rules.make_annotated_cdna.output.geneTrans
+    output:
+        results = join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'results.xprs'),
+        aln_stats = join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'annotated_bowtie2_{sample}.log')
+    log:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', 'annotated_bowtie2_{sample}_eXpress.log')
+    benchmark:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'logs', 'eXpress.benchmark.tsv')
+    message: 
+        """--- Mapping "{wildcards.sample}" PE reads to annotated transcriptome with bowtie2 and quantifying abundance with eXpress."""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.r1} {input.r2} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp ' + join(OUT_DIR, 'gffread_annotated_transcriptome') + '/gffread_annotated_transcripts* ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts gffread_annotated_transcripts.fa'
+              ' --seqType fq'
+              ' --left {wildcards.sample}.R1.fq.gz'
+              ' --right {wildcards.sample}.R2.fq.gz'
+              ' --gene_trans_map gffread_annotated_transcripts.gene_trans_map'
+              ' --thread_count 8'  
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --output_dir {wildcards.sample}'
+              ' --bowtie2_eXpress "--no-mixed --no-discordant --gbar 1000 --end-to-end -k 200 --score-min L,-0.6,-1.6"'
+              ' > {log} 2>&1')
+        shell('awk \'/CMD: set/{{f=1;next}} /CMD: touch/{{f=0}} f\' {log} | sed "/bam/d" > {output.aln_stats}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '{wildcards.sample}') + '/* ' + join(OUT_DIR, 'Genome', 'annotated_eXpress', '{wildcards.sample}'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# Rule for mapping SE reads to the new transcriptome file with bowtie2 and quantifying abundance with eXpress
+rule annotated_eXpress_se:
+    input:
+        r1 = lambda wildcards: seFILES[wildcards.sample]['R1'],
+        cdna = rules.make_annotated_cdna.output.cdna,
+        geneTrans = rules.make_annotated_cdna.output.geneTrans
+    output:
+        results = join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'results.xprs'),
+        aln_stats = join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'annotated_bowtie2_{sample}.log')
+    log:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', 'annotated_bowtie2_{sample}_eXpress.log')
+    benchmark:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'logs', 'eXpress.benchmark.tsv')
+    message: 
+        """--- Mapping "{wildcards.sample}" SE reads to annotated transcriptome with bowtie2 and quantifying abundance with eXpress."""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp {input.r1} ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && cp ' + join(OUT_DIR, 'gffread_annotated_transcriptome') + '/gffread_annotated_transcripts* '  + join(WORK_DIR, USER, JOB_ID))
+        if 'Female' in wildcards.sample:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts gffread_annotated_transcripts.fa'
+              ' --seqType fq'
+              ' --SS_lib_type R'
+              ' --single {wildcards.sample}.R1.fq.gz'
+              ' --gene_trans_map gffread_annotated_transcripts.gene_trans_map'
+              ' --thread_count 8'  
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --output_dir {wildcards.sample}'
+              ' --bowtie2_eXpress "--no-mixed --no-discordant --gbar 1000 --end-to-end -k 200 --score-min L,-0.6,-1.6"'
+              ' > {log} 2>&1')
+        else:
+            shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+              ' && align_and_estimate_abundance.pl' 
+              ' --transcripts gffread_annotated_transcripts.fa'
+              ' --seqType fq'
+              ' --single {wildcards.sample}.R1.fq.gz'
+              ' --gene_trans_map gffread_annotated_transcripts.gene_trans_map'
+              ' --thread_count 8'  
+              ' --est_method eXpress'
+              ' --aln_method bowtie2'
+              ' --output_dir {wildcards.sample}'
+              ' --bowtie2_eXpress "--no-mixed --no-discordant --gbar 1000 --end-to-end -k 200 --score-min L,-0.6,-1.6"'
+              ' > {log} 2>&1')
+        shell('awk \'/CMD: set/{{f=1;next}} /CMD: touch/{{f=0}} f\' {log} | sed "/bam/d" > {output.aln_stats}')
+        shell('mv ' + join(WORK_DIR, USER, JOB_ID, '{wildcards.sample}') + '/* ' + join(OUT_DIR, 'Genome', 'annotated_eXpress', '{wildcards.sample}'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))   
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+rule annotated_merge_abundance:
+    input:
+        quants = expand(join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'results.xprs'), sample = SAMPLES),
+        geneTrans = join(OUT_DIR, 'gffread_annotated_transcriptome', 'gffread_annotated_transcripts.gene_trans_map')
+    output:
+        abundances = join(OUT_DIR, 'Genome', 'annotated_eXpress', 'annotated.gene.TMM.EXPR.matrix'),
+        samplesList = join(OUT_DIR, 'Genome', 'annotated_eXpress', 'isoforms.samples.list')
+    log:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', 'abnd_merge.log')
+    benchmark:
+        join(OUT_DIR, 'Genome', 'annotated_eXpress', 'abnd_merge.benchmark.tsv')        
+    message: 
+        "--- Merging genome-based, annotated eXpress outputs from all samples"
+    run:
+        shell('ls -1 ' + join(OUT_DIR, 'Genome', 'annotated_eXpress', '*', 'results.xprs') + ' > ' + join(OUT_DIR, 'Genome', 'annotated_eXpress', 'isoforms.samples.list'))
+        shell('cd ' + join(OUT_DIR, 'Genome', 'annotated_eXpress') +
+                ' && abundance_estimates_to_matrix.pl'
+                ' --est_method eXpress'
+                ' --gene_trans_map {input.geneTrans}'
+                ' --name_sample_by_basedir'
+                ' --out_prefix annotated'
+                ' --quant_files ' + join(OUT_DIR, 'Genome', 'annotated_eXpress', 'isoforms.samples.list') +
+                ' > {log} 2>&1')
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+# __  __ _              _ _                                  
+#|  \/  (_)___  ___ ___| | | __ _ _ __   ___  ___  _   _ ___ 
+#| |\/| | / __|/ __/ _ \ | |/ _` | '_ \ / _ \/ _ \| | | / __|
+#| |  | | \__ \ (_|  __/ | | (_| | | | |  __/ (_) | |_| \__ \
+#|_|  |_|_|___/\___\___|_|_|\__,_|_| |_|\___|\___/ \__,_|___/
+#                                                            
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+# ## nucleotide blast of gffread transcripts and pasa transcripts
+rule BLASTn_pasa_genome:
+    input:
+        gffread_transcripts = rules.make_cdna.output.cdna,
+        pasa_transcripts = rules.pasa_comp_trans.output.compreh
+    output:
+        blastn = join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_genome.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_genome.benchmark.tsv')
+    message: 
+        """--- BlastN of PASA transcripts against the genome-based transcriptome """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.gffread_transcripts} {input.pasa_transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && makeblastdb -in gffread_transcripts.fa -dbtype nucl'
+                ' && blastn -query compreh_init_build.fasta -db gffread_transcripts.fa -max_target_seqs 1 -outfmt 6 -evalue 1e-5 -num_threads 10 > BLASTn.pasa_vs_genome.outfmt6'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'BLASTn.pasa_vs_genome.outfmt6') + ' ' + join(OUT_DIR, 'Misc'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+# ## nucleotide blast of gffread transcripts and pasa transcripts
+rule BLASTn_pasa_annotated:
+    input:
+        gffread_transcripts = rules.make_annotated_cdna.output.cdna,
+        pasa_transcripts = rules.pasa_comp_trans.output.compreh
+    output:
+        blastn = join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_annotated.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Misc', 'BLASTn.pasa_vs_annotated.benchmark.tsv')
+    message: 
+        """--- BlastN of PASA transcripts against the annotated transcriptome """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.gffread_transcripts} {input.pasa_transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && makeblastdb -in gffread_annotated_transcripts.fa -dbtype nucl'
+                ' && blastn -query compreh_init_build.fasta -db gffread_annotated_transcripts.fa -max_target_seqs 1 -outfmt 6 -evalue 1e-5 -num_threads 10 > BLASTn.pasa_vs_annotated.outfmt6'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'BLASTn.pasa_vs_annotated.outfmt6') + ' ' + join(OUT_DIR, 'Misc'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+#
+# _____     _             _        _          ______   _    ____    _  __  
+#|_   _| __(_)_ __   ___ | |_ __ _| |_ ___   / /  _ \ / \  / ___|  / \ \ \ 
+#  | || '__| | '_ \ / _ \| __/ _` | __/ _ \ | || |_) / _ \ \___ \ / _ \ | |
+#  | || |  | | | | | (_) | || (_| | ||  __/ | ||  __/ ___ \ ___) / ___ \| |
+#  |_||_|  |_|_| |_|\___/ \__\__,_|\__\___| | ||_| /_/   \_\____/_/   \_\ |
+#                                            \_\                       /_/ 
+#
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## predict long ORFs with TransDecoder
+rule pasa_Transdecoder_LongOrfs:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta') 
+    output:
+        longOrfs = join(OUT_DIR, 'Trinotate', 'PASA', 'compreh_init_build.fasta.transdecoder_dir/longest_orfs.pep')
+    log:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'LOGS', 'Transdecoder_LongOrfs.log')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'Transdecoder_LongOrfs.benchmark.tsv')
+    message: 
+        """--- Extracting long ORFs with TransDecoder (PASA) """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && TransDecoder.LongOrfs -t compreh_init_build.fasta'
+                ' -m 50' 
+                ' > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID) + '/*transdecoder_dir/* ' + join(OUT_DIR, 'Trinotate', 'PASA', 'compreh_init_build.fasta.transdecoder_dir/'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## protein blast initial long ORFs against UniProt database
+rule pasa_BLASTp_init:
+    input:
+        longOrfs = rules.pasa_Transdecoder_LongOrfs.output.longOrfs
+    output:
+        blastpI = join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results', 'BLASTp_init.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'BLASTp_init.benchmark.tsv')
+    message: 
+        """--- Initial BLASTp for TransDecoder (PASA) """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.longOrfs} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(SHARED_DATABASE, 'uniprot*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && blastp -query longest_orfs.pep -db uniprot_sprot.pep -max_target_seqs 1 -outfmt 6 -evalue 1e-5 -num_threads 10 > BLASTp_init.outfmt6'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'BLASTp_init.outfmt6') + ' ' + join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## search initial long ORFs against Pfam rotein domains using HMMER
+rule pasa_Pfam_init:
+    input:
+        longOrfs = rules.pasa_Transdecoder_LongOrfs.output.longOrfs
+    output:
+        pfamI = join(OUT_DIR, 'Trinotate', 'PASA', 'Pfam_results', 'pfam_i.domtblout')
+    log:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'LOGS', 'Pfam_init.log')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'Pfam_init.benchmark.tsv')
+    message: 
+        """--- Initial Pfam search for TransDecoder (PASA) """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.longOrfs} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(SHARED_DATABASE, 'Pfam*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && hmmscan --cpu 8 --domtblout pfam_i.domtblout Pfam-A.hmm longest_orfs.pep > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'pfam_i.domtblout') + ' ' + join(OUT_DIR, 'Trinotate', 'PASA', 'Pfam_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## integrate the Blast and Pfam search results into coding region selection
+rule pasa_Transdecoder_Predict:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta'),
+        blastpI = rules.pasa_BLASTp_init.output.blastpI,
+        pfamI = rules.pasa_Pfam_init.output.pfamI
+    output:
+        TransGff3 = join(OUT_DIR, 'Trinotate', 'PASA', 'compreh_init_build.fasta.transdecoder.gff3'),
+        peptides = join(OUT_DIR, 'Trinotate', 'PASA', 'compreh_init_build.fasta.transdecoder.pep')
+    log:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'LOGS', 'Transdecoder_Predict.log')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'Transdecoder_Predict.benchmark.tsv')
+    message: 
+        """--- Final ORF prediction (PASA) """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} {input.blastpI} {input.pfamI} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp -r ' + join(OUT_DIR, 'Trinotate', 'PASA', '*transdecoder_dir') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && TransDecoder.Predict'
+                ' -t compreh_init_build.fasta' 
+                ' --retain_pfam_hits pfam_i.domtblout --retain_blastp_hits BLASTp_init.outfmt6' 
+                ' > {log} 2>&1'
+                ' && mv compreh_init_build.fasta.transdecoder.* '  + join(OUT_DIR, 'Trinotate', 'PASA'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## blast transcripts to UniProt database
+rule pasa_BLASTx:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta')
+    output:
+        blastX = join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results', 'swissprot.blastx.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'BLASTx.tsv')
+    message: 
+        """--- Transcript search against SwissProt (BLASTx, PASA)"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(SHARED_DATABASE, 'uniprot*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && blastx'
+                ' -query compreh_init_build.fasta'
+                ' -db uniprot_sprot.pep -num_threads 16 -max_target_seqs 1 -outfmt 6 > swissprot.blastx.outfmt6'
+                ' && mv swissprot.blastx.outfmt6 ' + join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## blast proteins to UniProt database
+rule pasa_BLASTp:
+    input:
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides
+    output:
+        blastP = join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results', 'swissprot.blastp.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'BLASTp.tsv')
+    message: 
+        """--- Peptide search against SwissProt (BLASTp, PASA)"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.peptides} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(SHARED_DATABASE, 'uniprot*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && blastp'
+                ' -query compreh_init_build.fasta.transdecoder.pep'
+                ' -db uniprot_sprot.pep -num_threads 16 -max_target_seqs 1 -outfmt 6 > swissprot.blastp.outfmt6'
+                ' && mv swissprot.blastp.outfmt6 ' + join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## blast transcripts to custom database
+rule pasa_custom_BLASTx:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta')
+    output:
+        blastX = join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results', 'custom.blastx.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'custom_BLASTx.tsv')
+    message: 
+        """--- PASA transcript search against Custom database (BLASTx)"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + CUSTOM_DATABASE + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && makeblastdb -in ' + os.path.basename(CUSTOM_DATABASE) +
+                ' -dbtype prot'
+                ' && blastx'
+                ' -query compreh_init_build.fasta'
+                ' -db ' + os.path.basename(CUSTOM_DATABASE) + ' -num_threads 16 -max_target_seqs 1 -outfmt 6 > custom.blastx.outfmt6'
+                ' && mv custom.blastx.outfmt6 ' + join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## blast proteins to custom database
+rule pasa_custom_BLASTp:
+    input:
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides
+    output:
+        blastP = join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results', 'custom.blastp.outfmt6')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'custom_BLASTp.tsv')
+    message: 
+        """--- PASA peptide search against Custom database (BLASTx)"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.peptides} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + CUSTOM_DATABASE + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && makeblastdb -in ' + os.path.basename(CUSTOM_DATABASE) +
+                ' -dbtype prot'
+                ' && blastp'
+                ' -query compreh_init_build.fasta.transdecoder.pep'
+                ' -db ' + os.path.basename(CUSTOM_DATABASE) + ' -num_threads 16 -max_target_seqs 1 -outfmt 6 > custom.blastp.outfmt6'
+                ' && mv custom.blastp.outfmt6 ' + join(OUT_DIR, 'Trinotate', 'PASA', 'BLAST_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## run Pfam
+rule pasa_Pfam:
+    input:
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides
+    output:
+        pfam_out = join(OUT_DIR, 'Trinotate', 'PASA', 'Pfam_results', 'TrinotatePFAM.out')
+    log:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'LOGS', 'Pfam.log')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'Pfam.benchmark.tsv')
+    message: 
+        """--- PASA Pfam search with HMMSCAN """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.peptides} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp ' + join(SHARED_DATABASE, 'Pfam*') + ' ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && hmmscan --cpu 16 --domtblout TrinotatePFAM.out Pfam-A.hmm compreh_init_build.fasta.transdecoder.pep > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'TrinotatePFAM.out') + ' ' + join(OUT_DIR, 'Trinotate', 'PASA', 'Pfam_results'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Identify signal peptides with SignalP
+rule pasa_signalP:
+    input:
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides
+    output:
+        signalp = join(OUT_DIR, 'Trinotate', 'PASA', 'signalP.out')
+    log:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'LOGS', 'signalp.log')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'signalp.benchmark.tsv')
+    message: 
+        """--- Signal peptide search with signalP"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.peptides} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && signalp -f short -n signalP.out compreh_init_build.fasta.transdecoder.pep > {log} 2>&1'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'signalP.out ') + join(OUT_DIR, 'Trinotate', 'PASA'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## predict transmembrane domains with TMHMM
+rule pasa_TMHMM:
+    input:
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides
+    output:
+        tmhmm = join(OUT_DIR, 'Trinotate', 'PASA', 'tmhmm.out')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'tmhmm.benchmark.tsv')
+    message: 
+        """--- Transmembrane domain prediction """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.peptides} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && tmhmm --short < compreh_init_build.fasta.transdecoder.pep > tmhmm.out'
+                ' && mv ' + join(WORK_DIR, USER, JOB_ID, 'tmhmm.out ') + join(OUT_DIR, 'Trinotate', 'PASA'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## identify rRNA loci with RNAmmer
+rule pasa_RNAmmer:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta')
+    output:
+        rnammer = join(OUT_DIR, 'Trinotate', 'PASA', 'compreh_init_build.fasta.rnammer.gff')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'rnammer.tsv')
+    message: 
+        """--- Find ribosomal RNA loci"""
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID) + 
+                ' && ' + join(TRINOTATE_HOME, 'util', 'rnammer_support', 'RnammerTranscriptome.pl') +
+                ' --transcriptome compreh_init_build.fasta'
+                ' --path_to_rnammer /programs/rnammer-1.2/rnammer'
+                ' && mv *rnammer.gff ' + join(OUT_DIR, 'Trinotate', 'PASA'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## populate SQLite database with all annotation data
+rule pasa_Trinotate:
+    input:
+        transcripts = join(OUT_DIR, 'Trinity', 'pasa', 'bt2_reference', 'compreh_init_build.fasta'),
+        geneTrans = join(OUT_DIR, 'Trinity', 'pasa', 'compreh_init_build', 'compreh_init_build.geneToTrans_mapping'),
+        peptides = rules.pasa_Transdecoder_Predict.output.peptides,
+        blastX = rules.pasa_BLASTx.output.blastX,
+        blastP = rules.pasa_BLASTp.output.blastP,
+        cBlastX = rules.pasa_custom_BLASTx.output.blastX,
+        cBlastP = rules.pasa_custom_BLASTp.output.blastP,
+        pfam = rules.pasa_Pfam.output.pfam_out,
+        signalp = rules.pasa_signalP.output.signalp,
+        tmhmm = rules.pasa_TMHMM.output.tmhmm,
+        rnammer = rules.pasa_RNAmmer.output.rnammer,
+        sqlite = SQLITE
+    output:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'Trinotate_report.xls'),
+        join(OUT_DIR, 'Trinotate', 'PASA', 'Trinotate_report.xls.gene_ontology')
+    benchmark:
+        join(OUT_DIR, 'Trinotate', 'PASA', 'benchmarks', 'trinotate.tsv')
+    message: 
+        """--- Combining annotation outputs into SQLite database """
+    run:
+        shell('mkdir -p ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.transcripts} {input.peptides} {input.geneTrans} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cp {input.sqlite} ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && cd ' + join(WORK_DIR, USER, JOB_ID))
+        shell('cd ' + join(WORK_DIR, USER, JOB_ID) +
+                ' && Trinotate Trinotate.sqlite init'
+                ' --gene_trans_map compreh_init_build.geneToTrans_mapping'
+                ' --transcript_fasta compreh_init_build.fasta'
+                ' --transdecoder_pep compreh_init_build.fasta.transdecoder.pep'
+                ' && Trinotate Trinotate.sqlite LOAD_swissprot_blastp {input.blastP}'
+                ' && Trinotate Trinotate.sqlite LOAD_swissprot_blastx {input.blastX}'
+                ' && Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 {input.cBlastP} --prog blastp --dbtype ' + os.path.basename(CUSTOM_DATABASE) +
+                ' && Trinotate Trinotate.sqlite LOAD_custom_blast --outfmt6 {input.cBlastX} --prog blastx --dbtype ' + os.path.basename(CUSTOM_DATABASE) +
+                ' && Trinotate Trinotate.sqlite LOAD_pfam {input.pfam}'
+                ' && Trinotate Trinotate.sqlite LOAD_tmhmm {input.tmhmm}'
+                ' && Trinotate Trinotate.sqlite LOAD_signalp {input.signalp}'
+                ' && Trinotate Trinotate.sqlite LOAD_rnammer {input.rnammer}'
+                ' && Trinotate Trinotate.sqlite report > Trinotate_report.xls'
+                ' && ' + join(TRINOTATE_HOME, 'util', 'extract_GO_assignments_from_Trinotate_xls.pl') + ' --Trinotate_xls Trinotate_report.xls -G -I > Trinotate_report.xls.gene_ontology'
+                ' && mv Trinotate.sqlite Trinotate_report.xls Trinotate_report.xls.gene_ontology ' + join(OUT_DIR, 'Trinotate', 'PASA'))
+        shell('rm -r ' + join(WORK_DIR, USER, JOB_ID))
+
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+# __  __       _ _   _  ___   ____ 
+#|  \/  |_   _| | |_(_)/ _ \ / ___|
+#| |\/| | | | | | __| | | | | |    
+#| |  | | |_| | | |_| | |_| | |___ 
+#|_|  |_|\__,_|_|\__|_|\__\_\\____|
+#                                  
+##--------------------------------------------------------------------------------------##
+##--------------------------------------------------------------------------------------##
+
+## Rule to collate fastQC and HISAT2 outputs with multiQC
+rule multiQC:
+    input:
+        expand(join(OUT_DIR, 'HISAT-2', '{sample}', '{sample}' + '.csorted.hisat2.bam'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'fastQC', '{sample}' + '.R1_fastqc.html'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'fastQC', '{sample}' + '.R2_fastqc.html'), sample = peSAMPLES),
+        expand(join(OUT_DIR, 'Genome', 'annotated_eXpress', '{sample}', 'results.xprs'), sample = SAMPLES),
+        expand(join(OUT_DIR, 'Trinity', 'pasa', 'eXpress', '{sample}', 'results.xprs'), sample = SAMPLES)
+    output:
+        join(OUT_DIR, 'MultiQC', 'multiqc_report.html')
+    log:
+        join(OUT_DIR, 'MultiQC', 'multiQC.log')
+    benchmark:
+        join(OUT_DIR, 'MultiQC', 'multiQC.benchmark.tsv')
+    message: 
+        """--- Running MultiQC """
+    run:
+        shell('ls -1 ' + join(OUT_DIR) + '/HISAT-2/*log > ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('ls -1 ' + join(OUT_DIR) + '/fastQC/*fastqc.zip >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('ls -1 ' + join(OUT_DIR) + '/Genome/annotated_eXpress/*/annotated_bowtie2_*.log >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('ls -1 ' + join(OUT_DIR) + '/Trinity/pasa/eXpress/*/PASA_bowtie2_*.log >> ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt'))
+        shell('multiqc'
+                ' -f'
+                ' -o ' + join(OUT_DIR, 'MultiQC') + ' -l ' + join(OUT_DIR, 'MultiQC', 'summary_files.txt') +
+                ' > {log} 2>&1')

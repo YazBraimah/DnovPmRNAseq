@@ -1,0 +1,671 @@
+Thu Sep 20 15:30:53 EDT 2018
+[bam_sort_core] merging from 42 files and 1 in-memory blocks...
+[bam_sort_core] merging from 23 files and 1 in-memory blocks...
+[bam_sort_core] merging from 41 files and 1 in-memory blocks...
+[bam_sort_core] merging from 15 files and 1 in-memory blocks...
+[bam_sort_core] merging from 19 files and 1 in-memory blocks...
+[bam_sort_core] merging from 20 files and 1 in-memory blocks...
+[mpileup] 1 samples in 1 input files
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+Note: none of --samples-file, --ploidy or --ploidy-file given, assuming all sites are diploid
+[mpileup] 1 samples in 1 input files
+<mpileup> Set max per-file depth to 8000
+
+Checking required modules
+
+VCF-Simplify: A tool to convert VCF to TABLE and/or HAPLOTYPE file and vice-versa.
+
+Task assignment : "SimplifyVCF"
+  - Sub Task : Convert VCF To Table
+Reading the input vcf file all_cat_merged.vcf
+['C3_RT.bam', 'H3_RT.bam']
+- 2 samples found.
+
+Skipping the header.
+
+## Extracting the following fields of interest:
+
+  # SAMPLE of interest are: 
+   ['C3_RT.bam', 'H3_RT.bam']
+
+  # INFO of interest are: 
+   ['INDEL', 'IDV', 'IMF', 'DP', 'VDB', 'RPB', 'MQB', 'BQB', 'MQSB', 'SGB', 'MQ0F', 'ICB', 'HOB', 'AC', 'AN', 'DP4', 'MQ']
+
+  # FORMAT of interest are: 
+   ['PL', 'DP', 'AD', 'GT']
+
+
+- Output header of the simplified VCF file:
+['CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INDEL', 'IDV', 'IMF', 'DP', 'VDB', 'RPB', 'MQB', 'BQB', 'MQSB', 'SGB', 'MQ0F', 'ICB', 'HOB', 'AC', 'AN', 'DP4', 'MQ', 'C3_RT.bam:PL', 'C3_RT.bam:DP', 'C3_RT.bam:AD', 'C3_RT.bam:GT', 'H3_RT.bam:PL', 'H3_RT.bam:DP', 'H3_RT.bam:AD', 'H3_RT.bam:GT']
+
+Reading the input vcf file ... 
+
+Contig FBtr0226024 is being processed ... 
+
+Contig FBtr0226211 is being processed ... 
+
+Contig FBtr0226655 is being processed ... 
+
+Contig FBtr0226984 is being processed ... 
+
+Contig FBtr0226988 is being processed ... 
+
+Contig FBtr0227401 is being processed ... 
+
+Contig FBtr0227404 is being processed ... 
+
+Contig FBtr0227529 is being processed ... 
+
+Contig FBtr0228080 is being processed ... 
+
+Contig FBtr0228517 is being processed ... 
+
+Contig FBtr0229105 is being processed ... 
+
+Contig FBtr0229353 is being processed ... 
+
+Contig FBtr0229759 is being processed ... 
+
+Contig FBtr0229760 is being processed ... 
+
+Contig FBtr0229761 is being processed ... 
+
+Contig FBtr0229799 is being processed ... 
+
+Contig FBtr0230041 is being processed ... 
+
+Contig FBtr0230121 is being processed ... 
+
+Contig FBtr0230463 is being processed ... 
+
+Contig FBtr0230684 is being processed ... 
+
+Contig FBtr0230871 is being processed ... 
+
+Contig FBtr0230945 is being processed ... 
+
+Contig FBtr0231855 is being processed ... 
+
+Contig FBtr0232221 is being processed ... 
+
+Contig FBtr0232776 is being processed ... 
+
+Contig FBtr0232780 is being processed ... 
+
+Contig FBtr0233131 is being processed ... 
+
+Contig FBtr0233617 is being processed ... 
+
+Contig FBtr0233920 is being processed ... 
+
+Contig FBtr0233935 is being processed ... 
+
+Contig FBtr0234052 is being processed ... 
+
+Contig FBtr0234312 is being processed ... 
+
+Contig FBtr0235630 is being processed ... 
+
+Contig FBtr0237504 is being processed ... 
+
+Contig FBtr0237664 is being processed ... 
+
+Contig FBtr0237898 is being processed ... 
+
+Contig FBtr0238154 is being processed ... 
+
+Contig FBtr0238261 is being processed ... 
+
+Contig FBtr0238380 is being processed ... 
+
+Contig FBtr0238533 is being processed ... 
+
+Contig FBtr0238706 is being processed ... 
+
+Contig FBtr0238932 is being processed ... 
+
+Contig FBtr0239121 is being processed ... 
+
+Contig FBtr0239406 is being processed ... 
+
+Contig FBtr0239407 is being processed ... 
+
+Contig FBtr0239765 is being processed ... 
+
+Contig FBtr0239841 is being processed ... 
+
+Contig FBtr0239984 is being processed ... 
+
+Contig FBtr0434011 is being processed ... 
+
+Contig FBtr0434343 is being processed ... 
+
+Contig FBtr0435043 is being processed ... 
+
+Contig FBtr0435140 is being processed ... 
+
+Contig FBtr0435953 is being processed ... 
+
+Contig FBtr0436049 is being processed ... 
+
+Contig FBtr0436542 is being processed ... 
+
+Contig FBtr0436581 is being processed ... 
+
+Contig FBtr0436594 is being processed ... 
+
+Contig FBtr0436712 is being processed ... 
+
+Contig FBtr0437723 is being processed ... 
+
+Contig FBtr0437874 is being processed ... 
+
+Contig FBtr0438285 is being processed ... 
+
+Contig FBtr0438811 is being processed ... 
+
+Contig FBtr0439028 is being processed ... 
+
+Contig FBtr0440042 is being processed ... 
+
+Contig FBtr0440981 is being processed ... 
+
+Contig FBtr0441273 is being processed ... 
+
+Contig FBtr0441365 is being processed ... 
+
+Contig FBtr0441489 is being processed ... 
+
+Contig FBtr0441509 is being processed ... 
+
+Contig FBtr0442026 is being processed ... 
+
+Contig FBtr0442091 is being processed ... 
+
+Contig FBtr0442744 is being processed ... 
+
+Contig FBtr0443032 is being processed ... 
+
+Contig FBtr0443067 is being processed ... 
+
+Contig FBtr0443770 is being processed ... 
+
+Contig FBtr0444653 is being processed ... 
+
+Contig FBtr0444836 is being processed ... 
+
+Contig FBtr0445007 is being processed ... 
+
+Elapsed time:  0.462200403213501
+
+Thu Sep 20 19:02:26 EDT 2018
+Runtime: 3.52583 hours (12693s)

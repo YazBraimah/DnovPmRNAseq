@@ -1,0 +1,445 @@
+{
+    "__default__": {
+        "q"         : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "default",
+        "cores"     : 2,
+        "bl"        : 2,
+        "memory"    : "8G",
+        "time"      : "03:00:00"
+    },
+    "fastqcSE": {
+        "q"         : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "fastqc_se",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "01:00:00"
+    },
+    "fastqcPE": {
+        "q"         : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "fastqc_pe",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "01:00:00"
+    },
+    "hisat2_se_mapping": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "hs2.mapSE",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "16G",
+        "time"      : "12:00:00"
+    },
+    "hisat2_pe_mapping": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "hs2.mapPE",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "16G",
+        "time"      : "12:00:00"
+    },
+    "stringtie_assembly": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "st.asmbl",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "03:00:00"
+    },
+    "abundances": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "st.abndns",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "01:00:00"
+    },
+    "ggTrinity": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "ggTrinity",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "128G",
+        "time"      : "72:00:00"
+    },
+    "dnTrinity": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "dnTrinity",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "128G",
+        "time"      : "72:00:00"
+    },
+    "female_dnTrinity": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "fem_dnTrin",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "128G",
+        "time"      : "48:00:00"
+    },
+    "pasa_comp_trans": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "pasa",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "prep_reference_pasa": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "prep_ref_p",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "02:00:00"
+    },
+    "prep_reference_femTrin": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "prep_ref_f",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "02:00:00"
+    },
+    "femTrin_eXpress_se": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "FeXpress_se",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "PASA_eXpress_se": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "PeXpress_se",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "PASA_eXpress_pe": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "PeXpress_pe",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "make_cdna": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "eX.make_cdna",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "02:00:00"
+    },
+    "genome_eXpress_se": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "GeXpress_se",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "genome_eXpress_pe": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "GeXpress_pe",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "annotated_eXpress_se": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "AeXpress_se",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "annotated_eXpress_pe": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "AeXpress_pe",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "24:00:00"
+    },
+    "BLASTn_pasa_genome": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastn",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "BLASTn_femTrin_genome": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastn",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "Transdecoder_LongOrfs": {
+        "q"         : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "TD_Lorfs",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "12:00:00"
+    },
+    "BLASTp_init": {
+        "q"         : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastP1",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "120:00:00"
+    },
+    "Pfam_init": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "pfam_i",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "120:00:00"
+    },
+    "Transdecoder_Predict": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "TD_pred",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "12:00:00"
+    },
+    "BLASTx": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastx",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "BLASTp": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastp",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "custom_BLASTx": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "cblastx",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "24:00:00"
+    },
+    "custom_BLASTp": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "cblastp",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "Pfam": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "pfam",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "signalP": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "signalp",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "TMHMM": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "tmhmm",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "RNAmmer": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "rnammer",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "Trinotate": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "trinotate",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "01:00:00"
+    },
+    "pasa_Transdecoder_LongOrfs": {
+        "q"         : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "TD_Lorfs",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "12:00:00"
+    },
+    "pasa_BLASTp_init": {
+        "q"         : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastP1",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "120:00:00"
+    },
+    "pasa_Pfam_init": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "pfam_i",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "120:00:00"
+    },
+    "pasa_Transdecoder_Predict": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "TD_pred",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "12:00:00"
+    },
+    "pasa_BLASTx": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastx",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "pasa_BLASTp": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "blastp",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "pasa_custom_BLASTx": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "cblastx",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "24:00:00"
+    },
+    "pasa_custom_BLASTp": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "cblastp",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "24:00:00"
+    },
+    "pasa_Pfam": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "pfam",
+        "cores"     : 8,
+        "bl"        : 8,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "pasa_signalP": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "signalp",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "pasa_TMHMM": {
+       "q"          : "long_term.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "tmhmm",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "120:00:00"
+    },
+    "pasa_RNAmmer": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "rnammer",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "32G",
+        "time"      : "12:00:00"
+    },
+    "pasa_Trinotate": {
+       "q"          : "regular.q",
+        "output"    : "/home/ya76/GitHub_Repositories/D.novamexicana_Tuxedo2_ggTrinity_RNAseq/cluster_logs/",
+        "jname"     : "trinotate",
+        "cores"     : 4,
+        "bl"        : 4,
+        "memory"    : "8G",
+        "time"      : "01:00:00"
+    }
+
+}
+
